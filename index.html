@@ -14,8 +14,23 @@
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-.app{max-width:760px;margin:0 auto;padding:env(safe-area-inset-top) 14px calc(30px + env(safe-area-inset-bottom))}
-.hero{padding:22px 4px 14px}
+.app{max-width:980px;margin:0 auto;padding:env(safe-area-inset-top) 14px calc(30px + env(safe-area-inset-bottom))}
+.hero{padding:18px 4px 12px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center}
+.hero-copy{min-width:0}
+.weather-compact{min-width:300px;max-width:340px;background:rgba(255,255,255,.72);border:1px solid var(--line);border-radius:18px;padding:11px 12px;box-shadow:0 5px 18px rgba(20,32,51,.04)}
+.weather-top{display:grid;grid-template-columns:auto 1fr;gap:9px;align-items:center}
+.weather-icon{font-size:30px;line-height:1}
+.weather-now{display:flex;align-items:baseline;gap:8px;min-width:0}
+.weather-temp{font-size:25px;font-weight:950;letter-spacing:-.04em;white-space:nowrap}
+.weather-place{font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.weather-meta{font-size:11px;color:var(--muted);margin-top:1px;white-space:nowrap}
+.weather-advice{font-size:12px;font-weight:850;margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.weather-hours{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:8px;padding-top:7px;border-top:1px solid var(--line)}
+.weather-hour{text-align:center;min-width:0}
+.weather-hour-time{font-size:9px;color:var(--muted);font-weight:800}
+.weather-hour-icon{font-size:16px;line-height:1.2;margin:2px 0}
+.weather-hour-temp{font-size:10px;font-weight:900}
+.weather-error{font-size:11px;color:var(--muted)}
 .kicker{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 h1{font-size:31px;line-height:1.05;margin:5px 0 3px;letter-spacing:-.04em}
 .date{font-size:14px;color:var(--muted)}
@@ -73,7 +88,8 @@ footer{text-align:center;color:#8a93a3;font-size:11px;margin:20px 0 4px}
 .train-empty{font-size:12px;color:var(--muted);padding:7px 0}
 
 @media(min-width:680px){.grid.main{grid-template-columns:1fr 1fr}.card.buscard{grid-column:1/-1}}
-@media(max-width:560px){.train-grid{grid-template-columns:1fr}}
+@media(max-width:620px){.hero{grid-template-columns:1fr;gap:9px}.weather-compact{min-width:0;max-width:none;width:100%}.weather-advice{white-space:normal}}
+@media(max-width:560px){.train-grid{grid-template-columns:1fr}.app{padding-left:10px;padding-right:10px}.card{padding:14px}.hero{padding-top:14px}}
 
 /* V3 */
 .bus-state{display:flex;align-items:center;gap:7px;margin-top:8px;font-size:12px;font-weight:800}
@@ -94,9 +110,17 @@ footer{text-align:center;color:#8a93a3;font-size:11px;margin:20px 0 4px}
 <body>
 <div class="app">
   <header class="hero">
-    <div class="kicker">Familjen</div>
-    <h1 id="greeting">God morgon</h1>
-    <div class="date" id="today"></div>
+    <div class="hero-copy">
+      <div class="kicker">Familjen</div>
+      <h1 id="greeting">God morgon</h1>
+      <div class="date" id="today"></div>
+    </div>
+
+    <aside class="weather-compact" aria-label="Väder i Strängnäs">
+      <div id="weatherContent">
+        <div class="weather-error">Hämtar väder i Strängnäs…</div>
+      </div>
+    </aside>
   </header>
 
   <div class="grid main">
@@ -150,7 +174,7 @@ footer{text-align:center;color:#8a93a3;font-size:11px;margin:20px 0 4px}
   <div class="settings">
     <details>
       <summary>⚙️ Trafiklab-inställningar</summary>
-      <div class="warn">Version 4.2 använder Cloudflare Worker för kalender, buss och tåg. Skol- och bussrutiner döljs i kalenderlistorna eftersom de redan visas i panelens egna kort.</div>
+      <div class="warn">Version 5 använder Cloudflare Worker för kalender, buss och tåg samt Open-Meteo för kompakt väder i Strängnäs.</div>
 
       <div class="field">
         <label>Kalender-Worker</label>
@@ -186,7 +210,7 @@ footer{text-align:center;color:#8a93a3;font-size:11px;margin:20px 0 4px}
     </details>
   </div>
 
-  <footer>Data från Trafiklab.se • Familjepanel v4.2</footer>
+  <footer>Data från Trafiklab.se • Familjepanel v5</footer>
 </div>
 
 <script>
@@ -499,6 +523,151 @@ async function loadCalendar(){
   }
 }
 
+
+/* Open-Meteo – kompakt väder för Strängnäs */
+const WEATHER_LAT=59.3774;
+const WEATHER_LON=17.0312;
+
+function weatherIcon(code,isDay=1){
+  const c=Number(code);
+  if(c===0)return isDay?'☀️':'🌙';
+  if(c===1)return isDay?'🌤️':'🌙';
+  if(c===2)return '⛅';
+  if(c===3)return '☁️';
+  if(c===45||c===48)return '🌫️';
+  if([51,53,55,56,57].includes(c))return '🌦️';
+  if([61,63,65,66,67,80,81,82].includes(c))return '🌧️';
+  if([71,73,75,77,85,86].includes(c))return '❄️';
+  if([95,96,99].includes(c))return '⛈️';
+  return '🌤️';
+}
+
+function weatherText(code){
+  const c=Number(code);
+  if(c===0)return 'Klart';
+  if(c===1)return 'Mest klart';
+  if(c===2)return 'Växlande molnighet';
+  if(c===3)return 'Mulet';
+  if(c===45||c===48)return 'Dimma';
+  if([51,53,55,56,57].includes(c))return 'Duggregn';
+  if([61,63,65,66,67].includes(c))return 'Regn';
+  if([71,73,75,77].includes(c))return 'Snö';
+  if([80,81,82].includes(c))return 'Regnskurar';
+  if([85,86].includes(c))return 'Snöbyar';
+  if([95,96,99].includes(c))return 'Åska';
+  return 'Växlande väder';
+}
+
+function currentStockholmHourKey(){
+  const n=localNow();
+  return `${ymd(n)}T${String(n.getHours()).padStart(2,'0')}:00`;
+}
+
+function practicalWeatherAdvice(data,startIndex){
+  const h=data.hourly||{};
+  const end=Math.min((h.time||[]).length,startIndex+9);
+  const rows=[];
+
+  for(let i=startIndex;i<end;i++){
+    rows.push({
+      time:h.time?.[i]||'',
+      temp:Number(h.temperature_2m?.[i]),
+      feels:Number(h.apparent_temperature?.[i]),
+      pop:Number(h.precipitation_probability?.[i]||0),
+      precip:Number(h.precipitation?.[i]||0),
+      wind:Number(h.wind_speed_10m?.[i]||0),
+      code:Number(h.weather_code?.[i])
+    });
+  }
+
+  if(!rows.length)return '✅ Lugnt väder närmaste timmarna';
+
+  const maxWind=Math.max(...rows.map(r=>r.wind));
+  const maxTemp=Math.max(...rows.map(r=>r.temp));
+  const minTemp=Math.min(...rows.map(r=>r.temp));
+  const snow=rows.find(r=>[71,73,75,77,85,86].includes(r.code));
+  const thunder=rows.find(r=>[95,96,99].includes(r.code));
+  const rain=rows.find(r=>r.pop>=45||r.precip>=0.2||[51,53,55,61,63,65,80,81,82].includes(r.code));
+  const sunnyCount=rows.filter(r=>[0,1].includes(r.code)).length;
+
+  if(thunder)return `⛈️ Åskrisk runt ${thunder.time.slice(11,16)}`;
+  if(snow)return `❄️ Snö möjlig runt ${snow.time.slice(11,16)}`;
+  if(rain){
+    const hh=rain.time.slice(11,16);
+    return (rain.precip>=2||rain.pop>=75)
+      ? `☔ Regnjacka – regn väntas runt ${hh}`
+      : `🌦️ Risk för regn runt ${hh}`;
+  }
+  if(maxWind>=12)return `💨 Rejält blåsigt – upp till ${Math.round(maxWind)} m/s`;
+  if(maxWind>=8)return `💨 Blåsigt – upp till ${Math.round(maxWind)} m/s`;
+  if(maxTemp>=28)return '🥵 Varmt – vatten och solskydd';
+  if(maxTemp>=24&&sunnyCount>=Math.ceil(rows.length/2))return '☀️ Soligt och varmt – solskydd kan vara bra';
+  if(minTemp<=2)return '🧥 Kallt – varm jacka rekommenderas';
+  if(minTemp<=9)return '🧥 Svalt – jacka kan vara skön';
+  if(sunnyCount>=Math.ceil(rows.length*.65))return '☀️ Mest soligt de närmaste timmarna';
+  return '✅ Lugnt väder de närmaste timmarna';
+}
+
+function renderWeather(data){
+  const c=data.current||{};
+  const h=data.hourly||{};
+  const key=currentStockholmHourKey();
+
+  let start=(h.time||[]).findIndex(t=>t>=key);
+  if(start<0)start=0;
+
+  const indices=[start,start+2,start+4,start+6].filter(i=>i<(h.time||[]).length);
+
+  const icon=weatherIcon(c.weather_code,c.is_day);
+  const temp=Math.round(Number(c.temperature_2m));
+  const feels=Math.round(Number(c.apparent_temperature));
+  const wind=Math.round(Number(c.wind_speed_10m));
+  const precip=Number(c.precipitation||0);
+  const advice=practicalWeatherAdvice(data,start);
+
+  const hours=indices.map(i=>`
+    <div class="weather-hour">
+      <div class="weather-hour-time">${String(h.time[i]).slice(11,16)}</div>
+      <div class="weather-hour-icon">${weatherIcon(h.weather_code[i],1)}</div>
+      <div class="weather-hour-temp">${Math.round(Number(h.temperature_2m[i]))}°</div>
+    </div>`).join('');
+
+  weatherContent.innerHTML=`
+    <div class="weather-top">
+      <div class="weather-icon">${icon}</div>
+      <div>
+        <div class="weather-place">Strängnäs</div>
+        <div class="weather-now">
+          <span class="weather-temp">${temp}°</span>
+          <span class="weather-meta">${weatherText(c.weather_code)}</span>
+        </div>
+        <div class="weather-meta">Känns ${feels}° • ${wind} m/s${precip>0?` • ${precip.toFixed(1)} mm`:''}</div>
+      </div>
+    </div>
+    <div class="weather-advice">${advice}</div>
+    <div class="weather-hours">${hours}</div>`;
+}
+
+async function loadWeather(){
+  const params=new URLSearchParams({
+    latitude:String(WEATHER_LAT),
+    longitude:String(WEATHER_LON),
+    current:'temperature_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m,is_day',
+    hourly:'temperature_2m,apparent_temperature,precipitation_probability,precipitation,weather_code,wind_speed_10m',
+    forecast_days:'2',
+    timezone:'Europe/Stockholm',
+    wind_speed_unit:'ms'
+  });
+
+  try{
+    const r=await fetch(`https://api.open-meteo.com/v1/forecast?${params.toString()}`);
+    if(!r.ok)throw new Error(`HTTP ${r.status}`);
+    renderWeather(await r.json());
+  }catch(e){
+    weatherContent.innerHTML='<div class="weather-error">🌤️ Vädret kunde inte hämtas just nu.</div>';
+  }
+}
+
 saveSettings.onclick=()=>{
   localStorage.setItem('calendar_worker_url',calendarWorkerUrl.value.trim());
   localStorage.setItem('calendar_panel_token',panelToken.value.trim());
@@ -511,7 +680,7 @@ saveSettings.onclick=()=>{
 
 findStops.onclick=()=>{settingsStatus.textContent='Hållplats-id är redan förifyllda. Ändra dem manuellt här om det behövs.';};
 
-refresh.onclick=()=>{renderPlannedBus();loadDepartures();loadTrains();loadCalendar()};
+refresh.onclick=()=>{renderPlannedBus();loadDepartures();loadTrains();loadCalendar();loadWeather()};
 toggleAll.onclick=()=>{showAll=!showAll;toggleAll.textContent=showAll?'Visa bara 325/631':'Visa alla bussar';loadDepartures()};
 
 fillSettings();
@@ -519,7 +688,9 @@ renderStatic();
 loadDepartures();
 loadTrains();
 loadCalendar();
+loadWeather();
 setInterval(()=>{renderStatic();loadDepartures();loadTrains();loadCalendar()},60000);
+setInterval(loadWeather,15*60*1000);
 
 if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
 </script>
