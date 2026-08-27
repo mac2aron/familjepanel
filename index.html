@@ -144,23 +144,13 @@ footer{text-align:center;color:#8a93a3;font-size:11px;margin:20px 0 4px}
     </section>
 
     <section class="card"><h2>📌 I dag</h2><div id="agenda"></div></section>
-    <section class="card"><h2>🗓️ Den här veckan</h2><div id="week"></div></section>
+    <section class="card"><h2>🗓️ Kommande 7 dagar</h2><div id="week"></div></section>
   </div>
 
   <div class="settings">
     <details>
       <summary>⚙️ Trafiklab-inställningar</summary>
-      <div class="warn">Version 3 sparar Trafiklab-, ResRobot- och paneltoken endast i den här webbläsarens lokala lagring. Kalenderadresserna ligger skyddade som Secrets i Cloudflare Worker.</div>
-
-      <div class="field">
-        <label>Trafiklab Realtime API-nyckel</label>
-        <input id="apiKey" type="password" autocomplete="off" placeholder="Klistra in bussnyckeln">
-      </div>
-
-      <div class="field">
-        <label>ResRobot v2.1 API-nyckel</label>
-        <input id="resrobotKey" type="password" autocomplete="off" placeholder="Klistra in ResRobot-nyckeln">
-      </div>
+      <div class="warn">Version 4 använder Cloudflare Worker för kalender, buss och tåg. Endast paneltoken sparas lokalt i den här webbläsaren.</div>
 
       <div class="field">
         <label>Kalender-Worker</label>
@@ -196,7 +186,7 @@ footer{text-align:center;color:#8a93a3;font-size:11px;margin:20px 0 4px}
     </details>
   </div>
 
-  <footer>Data från Trafiklab.se • Familjepanel v3</footer>
+  <footer>Data från Trafiklab.se • Familjepanel v4</footer>
 </div>
 
 <script>
@@ -240,8 +230,6 @@ function renderStatic(){
 
 function getSettings(){
   return{
-    key:localStorage.getItem('trafiklab_key')||'',
-    resrobot:localStorage.getItem('resrobot_key')||'',
     calendarWorker:localStorage.getItem('calendar_worker_url')||'https://familjepanel-calendar.7ydb66wf9r.workers.dev/',
     panelToken:localStorage.getItem('calendar_panel_token')||'',
     roteby:localStorage.getItem('roteby_id')||'740038257',
@@ -251,14 +239,20 @@ function getSettings(){
 }
 function fillSettings(){
   const s=getSettings();
-  apiKey.value=s.key;resrobotKey.value=s.resrobot;calendarWorkerUrl.value=s.calendarWorker;panelToken.value=s.panelToken;
+  calendarWorkerUrl.value=s.calendarWorker;panelToken.value=s.panelToken;
   rotebyId.value=s.roteby;sundbyId.value=s.sundby;kulturId.value=s.kultur;
 }
-async function trafiklab(path){
+async function workerApi(path){
   const s=getSettings();
-  if(!s.key)throw new Error('Ingen Trafiklab-nyckel sparad.');
-  const r=await fetch(`https://realtime-api.trafiklab.se/v1${path}${path.includes('?')?'&':'?'}key=${encodeURIComponent(s.key)}`);
-  if(!r.ok)throw new Error(`Trafiklab svarade ${r.status}.`);
+  if(!s.calendarWorker)throw new Error('Worker-adress saknas.');
+  if(!s.panelToken)throw new Error('Paneltoken saknas.');
+  const base=s.calendarWorker.replace(/\/?$/,'');
+  const r=await fetch(`${base}${path}`,{headers:{Authorization:`Bearer ${s.panelToken}`}});
+  if(!r.ok){
+    let detail='';
+    try{detail=(await r.json()).error||''}catch{}
+    throw new Error(`${r.status}${detail?` • ${detail}`:''}`);
+  }
   return r.json();
 }
 function routeNumber(x){return String(x.route?.short_name||x.route?.designation||x.route?.name||x.route?.id||'')}
@@ -349,10 +343,10 @@ async function loadDepartures(){
   if(!showAll&&mins>60){
     renderPlannedBus();apiStatus.textContent='Planerad resa visas. Trafiklab aktiveras automatiskt när det är högst 60 minuter kvar.';return;
   }
-  if(!s.key||!j.originId){apiStatus.textContent=!s.key?'Lägg in Trafiklab-nyckeln under inställningar.':'Hållplats-id saknas.';return}
+  if(!s.panelToken||!j.originId){apiStatus.textContent=!s.panelToken?'Lägg in paneltoken under inställningar.':'Hållplats-id saknas.';return}
   apiStatus.textContent='Hämtar Trafiklab…';
   try{
-    const data=await trafiklab(`/departures/${encodeURIComponent(j.originId)}`),all=(data.departures||data.timetable||data.entries||[]);
+    const data=await workerApi(`/bus?stopId=${encodeURIComponent(j.originId)}`),all=(data.departures||data.timetable||data.entries||[]);
     busMode.textContent='TRAFIKLAB';
     if(showAll){
       departures.innerHTML=all.slice(0,8).map(x=>{
@@ -380,22 +374,7 @@ async function loadDepartures(){
 
 /* ResRobot – två närmaste direkta resor i vardera riktningen */
 async function resrobotTrips(originId,destId){
-  const s=getSettings();
-  if(!s.resrobot)throw new Error('Ingen ResRobot-nyckel sparad.');
-  const params=new URLSearchParams({
-    format:'json',
-    originId,
-    destId,
-    accessId:s.resrobot,
-    lang:'sv',
-    numF:'2',
-    numB:'0',
-    passlist:'0',
-    maxChange:'0'
-  });
-  const r=await fetch(`https://api.resrobot.se/v2.1/trip?${params.toString()}`);
-  if(!r.ok)throw new Error(`ResRobot svarade ${r.status}.`);
-  const data=await r.json();
+  const data=await workerApi(`/trains?originId=${encodeURIComponent(originId)}&destId=${encodeURIComponent(destId)}&numF=2`);
   if(data.errorCode)throw new Error(data.errorText||data.errorCode);
   return data.Trip||[];
 }
@@ -464,7 +443,7 @@ function eventDateParts(iso){
   const d=new Date(iso),parts=new Intl.DateTimeFormat('en-CA',{timeZone:TZ,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).formatToParts(d);
   const m=Object.fromEntries(parts.map(p=>[p.type,p.value]));return{date:`${m.year}-${m.month}-${m.day}`,time:`${m.hour}:${m.minute}`};
 }
-function endOfCurrentWeekYmd(){const n=localNow(),d=new Date(n);d.setDate(n.getDate()+((7-n.getDay())%7));return ymd(d)}
+function endOfRollingWindowYmd(){const n=localNow(),d=new Date(n);d.setDate(n.getDate()+6);return ymd(d)}
 function calendarTimeLabel(ev){return ev.allDay?'Hela dagen':`${eventDateParts(ev.start).time}–${eventDateParts(ev.end).time}`}
 function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function calendarEventHtml(ev){
@@ -474,7 +453,7 @@ function calendarEventHtml(ev){
     <span class="calendar-source">${escapeHtml(ev.source||'Kalender')}</span></div>`;
 }
 function renderCalendar(events){
-  const todayYmd=ymd(localNow()),sunday=endOfCurrentWeekYmd();
+  const todayYmd=ymd(localNow()),windowEnd=endOfRollingWindowYmd();
   const todayEvents=events.filter(ev=>{
     const start=eventDateParts(ev.start).date,end=eventDateParts(new Date(new Date(ev.end).getTime()-1).toISOString()).date;
     return start<=todayYmd&&end>=todayYmd;
@@ -482,10 +461,10 @@ function renderCalendar(events){
   agenda.innerHTML=todayEvents.length?todayEvents.map(calendarEventHtml).join(''):'<div class="calendar-empty">Inga kalenderhändelser i dag.</div>';
 
   const grouped=new Map();
-  events.filter(ev=>{const d=eventDateParts(ev.start).date;return d>=todayYmd&&d<=sunday}).forEach(ev=>{
+  events.filter(ev=>{const d=eventDateParts(ev.start).date;return d>=todayYmd&&d<=windowEnd}).forEach(ev=>{
     const key=eventDateParts(ev.start).date;if(!grouped.has(key))grouped.set(key,[]);grouped.get(key).push(ev);
   });
-  if(!grouped.size){week.innerHTML='<div class="calendar-empty">Inga fler kalenderhändelser den här veckan.</div>';return}
+  if(!grouped.size){week.innerHTML='<div class="calendar-empty">Inga kalenderhändelser de kommande 7 dagarna.</div>';return}
   week.innerHTML=[...grouped.entries()].map(([date,items])=>{
     const d=new Date(`${date}T12:00:00`),label=new Intl.DateTimeFormat('sv-SE',{weekday:'long',day:'numeric',month:'short'}).format(d);
     return `<div class="day-group"><div class="day-label">${label}</div>${items.map(calendarEventHtml).join('')}</div>`;
@@ -497,8 +476,8 @@ async function loadCalendar(){
     agenda.innerHTML=week.innerHTML='<div class="calendar-empty">Lägg in kalenderns paneltoken under inställningar.</div>';return;
   }
   try{
-    const base=s.calendarWorker.replace(/\/?$/,'/');
-    const r=await fetch(`${base}?days=14`,{headers:{Authorization:`Bearer ${s.panelToken}`}});
+    const base=s.calendarWorker.replace(/\/?$/,'');
+    const r=await fetch(`${base}/calendar?days=7`,{headers:{Authorization:`Bearer ${s.panelToken}`}});
     if(!r.ok)throw new Error(`HTTP ${r.status}`);
     const data=await r.json();renderCalendar(Array.isArray(data.events)?data.events:[]);
     if(data.errors?.length)settingsStatus.textContent=`Kalendern laddades, men ${data.errors.length} källa/källor gav fel.`;
@@ -508,8 +487,6 @@ async function loadCalendar(){
 }
 
 saveSettings.onclick=()=>{
-  localStorage.setItem('trafiklab_key',apiKey.value.trim());
-  localStorage.setItem('resrobot_key',resrobotKey.value.trim());
   localStorage.setItem('calendar_worker_url',calendarWorkerUrl.value.trim());
   localStorage.setItem('calendar_panel_token',panelToken.value.trim());
   localStorage.setItem('roteby_id',rotebyId.value.trim());
@@ -519,17 +496,7 @@ saveSettings.onclick=()=>{
   renderPlannedBus();loadDepartures();loadTrains();loadCalendar();
 };
 
-findStops.onclick=async()=>{
-  settingsStatus.textContent='Söker…';
-  try{
-    const names=['Roteby','Sundbyvägen Sundby Park','Eskilstunavägen 9'],out=[];
-    for(const n of names){
-      const d=await trafiklab(`/stops/name/${encodeURIComponent(n)}`),groups=d.stop_groups||[];
-      out.push(`${n}: ${groups.slice(0,3).map(g=>`${g.name} (${g.id})`).join(', ')||'ingen träff'}`);
-    }
-    settingsStatus.innerHTML=out.join('<br>');
-  }catch(e){settingsStatus.textContent=e.message}
-};
+findStops.onclick=()=>{settingsStatus.textContent='Hållplats-id är redan förifyllda. Ändra dem manuellt här om det behövs.';};
 
 refresh.onclick=()=>{renderPlannedBus();loadDepartures();loadTrains();loadCalendar()};
 toggleAll.onclick=()=>{showAll=!showAll;toggleAll.textContent=showAll?'Visa bara 325/631':'Visa alla bussar';loadDepartures()};
