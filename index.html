@@ -133,11 +133,11 @@ footer{text-align:center;color:#8a93a3;font-size:11px;margin:20px 0 4px}
       <div class="train-grid">
         <div class="train-direction">
           <h3>Strängnäs → Stockholm C</h3>
-          <div id="trainToStockholm"><div class="train-empty">Lägg in ResRobot-nyckeln under inställningar.</div></div>
+          <div id="trainToStockholm"><div class="train-empty">Hämtar tåg…</div></div>
         </div>
         <div class="train-direction">
           <h3>Stockholm C → Strängnäs</h3>
-          <div id="trainToStrangnas"><div class="train-empty">Lägg in ResRobot-nyckeln under inställningar.</div></div>
+          <div id="trainToStrangnas"><div class="train-empty">Hämtar tåg…</div></div>
         </div>
       </div>
       <div class="status" id="trainStatus"></div>
@@ -150,7 +150,7 @@ footer{text-align:center;color:#8a93a3;font-size:11px;margin:20px 0 4px}
   <div class="settings">
     <details>
       <summary>⚙️ Trafiklab-inställningar</summary>
-      <div class="warn">Version 4 använder Cloudflare Worker för kalender, buss och tåg. Endast paneltoken sparas lokalt i den här webbläsaren.</div>
+      <div class="warn">Version 4.2 använder Cloudflare Worker för kalender, buss och tåg. Skol- och bussrutiner döljs i kalenderlistorna eftersom de redan visas i panelens egna kort.</div>
 
       <div class="field">
         <label>Kalender-Worker</label>
@@ -186,7 +186,7 @@ footer{text-align:center;color:#8a93a3;font-size:11px;margin:20px 0 4px}
     </details>
   </div>
 
-  <footer>Data från Trafiklab.se • Familjepanel v4</footer>
+  <footer>Data från Trafiklab.se • Familjepanel v4.2</footer>
 </div>
 
 <script>
@@ -418,8 +418,8 @@ function renderTrainTrips(trips){
 
 async function loadTrains(){
   const s=getSettings();
-  if(!s.resrobot){
-    trainToStockholm.innerHTML=trainToStrangnas.innerHTML='<div class="train-empty">Lägg in ResRobot-nyckeln under inställningar.</div>';
+  if(!s.panelToken){
+    trainToStockholm.innerHTML=trainToStrangnas.innerHTML='<div class="train-empty">Lägg in paneltoken under inställningar.</div>';
     trainStatus.textContent='';
     return;
   }
@@ -452,16 +452,29 @@ function calendarEventHtml(ev){
     <div><div class="calendar-title">${escapeHtml(ev.title||'(utan titel)')}</div><div class="calendar-meta">${escapeHtml(meta)}</div></div>
     <span class="calendar-source">${escapeHtml(ev.source||'Kalender')}</span></div>`;
 }
+
+function isRoutinePanelEvent(ev){
+  const title=String(ev.title||'').trim().toLowerCase();
+  const routineTitles=[
+    'buss • till skolan',
+    'buss hem • siri & axel',
+    'siri • buss till kulturskolan',
+    'siri • skola',
+    'axel • skola'
+  ];
+  return routineTitles.includes(title);
+}
+
 function renderCalendar(events){
   const todayYmd=ymd(localNow()),windowEnd=endOfRollingWindowYmd();
-  const todayEvents=events.filter(ev=>{
+  const todayEvents=events.filter(ev=>!isRoutinePanelEvent(ev)).filter(ev=>{
     const start=eventDateParts(ev.start).date,end=eventDateParts(new Date(new Date(ev.end).getTime()-1).toISOString()).date;
     return start<=todayYmd&&end>=todayYmd;
   });
   agenda.innerHTML=todayEvents.length?todayEvents.map(calendarEventHtml).join(''):'<div class="calendar-empty">Inga kalenderhändelser i dag.</div>';
 
   const grouped=new Map();
-  events.filter(ev=>{const d=eventDateParts(ev.start).date;return d>=todayYmd&&d<=windowEnd}).forEach(ev=>{
+  events.filter(ev=>!isRoutinePanelEvent(ev)).filter(ev=>{const d=eventDateParts(ev.start).date;return d>=todayYmd&&d<=windowEnd}).forEach(ev=>{
     const key=eventDateParts(ev.start).date;if(!grouped.has(key))grouped.set(key,[]);grouped.get(key).push(ev);
   });
   if(!grouped.size){week.innerHTML='<div class="calendar-empty">Inga kalenderhändelser de kommande 7 dagarna.</div>';return}
