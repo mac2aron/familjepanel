@@ -1,0 +1,10 @@
+{
+  "name": "Familjepanel – Siri & Axel",
+  "short_name": "Familjepanel",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f4f6f8",
+  "theme_color": "#111827",
+  "lang": "sv",
+  "description": "Mobil familjepanel för skola, aktiviteter och relevanta bussar."
+}
