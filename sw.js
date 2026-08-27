@@ -1,1 +1,9 @@
-const CACHE='familjepanel-v2';const ASSETS=['./','./index.html','./manifest.webmanifest'];self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS))));self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>{if(e.request.url.includes('realtime-api.trafiklab.se'))return;e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)))});
+const CACHE='familjepanel-v2-verified';
+const ASSETS=['./','./index.html','./manifest.webmanifest'];
+self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)))});
+self.addEventListener('activate',e=>e.waitUntil((async()=>{for(const k of await caches.keys())if(k!==CACHE)await caches.delete(k);await self.clients.claim()})()));
+self.addEventListener('fetch',e=>{
+  const u=e.request.url;
+  if(u.includes('trafiklab.se')||u.includes('resrobot.se')) return;
+  e.respondWith(fetch(e.request).then(r=>{const c=r.clone();caches.open(CACHE).then(x=>x.put(e.request,c));return r}).catch(()=>caches.match(e.request)));
+});

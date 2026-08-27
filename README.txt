@@ -1,24 +1,27 @@
-FAMILJEPANEL – SIRI & AXEL
+FAMILJEPANEL V2 – VERIFIERAD
 
-1. Lägg filerna på en enkel HTTPS-webbserver, exempelvis GitHub Pages, Cloudflare Pages eller Netlify.
-2. Öppna sidan i mobilen.
-3. Öppna Trafiklab-inställningar.
-4. Klistra in Trafiklab API-nyckeln.
-5. Tryck Sök hållplatser och välj rätt id för Roteby och Sundbyvägen Sundby Park.
-6. Spara.
-7. På iPhone: Dela > Lägg till på hemskärmen. På Android: Installera app/Lägg till på startskärmen.
+Innehåll:
+- index.html
+- manifest.webmanifest
+- sw.js
 
-Version 1 sparar API-nyckeln i localStorage. För en publik lösning bör ett proxy-lager användas så att nyckeln inte exponeras i webbläsaren.
+Nytt i v2:
+- ResRobot v2.1-fält under inställningar.
+- Två närmaste direkta tåg Strängnäs → Stockholm C.
+- Två närmaste direkta tåg Stockholm C → Strängnäs.
+- Realtidsjusterad avgång/ankomst, försening och spår visas när ResRobot levererar uppgifterna.
+- Sidfoten visar Familjepanel v2.
+- Service worker använder ny cache-version och rensar gamla cacheposter.
 
+Efter uppladdning till GitHub:
+1. Ersätt index.html, manifest.webmanifest och sw.js i repositoryts rot.
+2. Commit till main.
+3. Vänta tills GitHub Pages har byggt klart.
+4. Gör Ctrl+F5 eller öppna sidan inkognito första gången.
+5. Öppna Trafiklab-inställningar.
+6. Klistra in din ResRobot v2.1-nyckel och tryck Spara.
 
-NYTT I VERSION 2
-- Två närmaste direkta tåg Strängnäs station → Stockholm Central.
-- Två närmaste direkta tåg Stockholm Central → Strängnäs station.
-- ResRobot v2.1-nyckel sparas lokalt i webbläsaren.
-- Planerad respektive faktisk avgång, försening och spår visas när data finns.
-- Stations-id är förinställda:
-  Strängnäs station: 740000108
-  Stockholm Centralstation: 740000001
-
-Efter uppladdning till GitHub Pages:
-Öppna Trafiklab-inställningar, klistra in ResRobot v2.1 API-nyckeln och tryck Spara.
+Buss-id är förifyllda:
+Roteby: 740038257
+Sundbyvägen Sundby Park: 740021882
+Eskilstunavägen 9: 740021879
