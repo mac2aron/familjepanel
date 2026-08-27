@@ -1,27 +1,15 @@
-FAMILJEPANEL V2 – VERIFIERAD
+FAMILJEPANEL V3
 
-Innehåll:
-- index.html
-- manifest.webmanifest
-- sw.js
+Nytt:
+• Kalendern I dag / Den här veckan hämtas från Cloudflare Worker.
+• Paneltoken sparas bara lokalt i webbläsaren.
+• Buss: planerad tur före 60-minutersfönstret, Trafiklab inom fönstret.
+• Buss visar I tid, +X min, Inställd eller Tidtabell när realtid saknas.
+• Efter morgonresan växlar panelen automatiskt till eftermiddagen.
+• Tisdag går eftermiddagsresan till Kulturskolan.
+• Tåg: två åt varje håll, tydlig försening 09.18 → 09.24 +6 min, spår när det finns.
+• Ny cache: familjepanel-v3.
 
-Nytt i v2:
-- ResRobot v2.1-fält under inställningar.
-- Två närmaste direkta tåg Strängnäs → Stockholm C.
-- Två närmaste direkta tåg Stockholm C → Strängnäs.
-- Realtidsjusterad avgång/ankomst, försening och spår visas när ResRobot levererar uppgifterna.
-- Sidfoten visar Familjepanel v2.
-- Service worker använder ny cache-version och rensar gamla cacheposter.
-
-Efter uppladdning till GitHub:
-1. Ersätt index.html, manifest.webmanifest och sw.js i repositoryts rot.
-2. Commit till main.
-3. Vänta tills GitHub Pages har byggt klart.
-4. Gör Ctrl+F5 eller öppna sidan inkognito första gången.
-5. Öppna Trafiklab-inställningar.
-6. Klistra in din ResRobot v2.1-nyckel och tryck Spara.
-
-Buss-id är förifyllda:
-Roteby: 740038257
-Sundbyvägen Sundby Park: 740021882
-Eskilstunavägen 9: 740021879
+GitHub:
+Ersätt index.html, manifest.webmanifest och sw.js, commit till main, vänta på Pages och kör Ctrl+F5.
+Öppna sedan inställningar, klistra in PANEL_TOKEN och tryck Spara.
