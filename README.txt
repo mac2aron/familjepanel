@@ -9,3 +9,16 @@ FAMILJEPANEL – SIRI & AXEL
 7. På iPhone: Dela > Lägg till på hemskärmen. På Android: Installera app/Lägg till på startskärmen.
 
 Version 1 sparar API-nyckeln i localStorage. För en publik lösning bör ett proxy-lager användas så att nyckeln inte exponeras i webbläsaren.
+
+
+NYTT I VERSION 2
+- Två närmaste direkta tåg Strängnäs station → Stockholm Central.
+- Två närmaste direkta tåg Stockholm Central → Strängnäs station.
+- ResRobot v2.1-nyckel sparas lokalt i webbläsaren.
+- Planerad respektive faktisk avgång, försening och spår visas när data finns.
+- Stations-id är förinställda:
+  Strängnäs station: 740000108
+  Stockholm Centralstation: 740000001
+
+Efter uppladdning till GitHub Pages:
+Öppna Trafiklab-inställningar, klistra in ResRobot v2.1 API-nyckeln och tryck Spara.

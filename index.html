@@ -9,6 +9,22 @@
 <style>
 :root{--bg:#f4f6f8;--card:#fff;--ink:#152033;--muted:#6b7280;--line:#e5e7eb;--siri:#d94b73;--siriSoft:#fff0f5;--axel:#2f76c6;--axelSoft:#eef6ff;--bus:#24835a;--busSoft:#edf8f1;--warnSoft:#fff7ed}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.app{max-width:760px;margin:0 auto;padding:env(safe-area-inset-top) 14px calc(30px + env(safe-area-inset-bottom))}.hero{padding:22px 4px 14px}.kicker{font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}h1{font-size:31px;line-height:1.05;margin:5px 0 3px;letter-spacing:-.04em}.date{font-size:14px;color:var(--muted)}.grid{display:grid;gap:12px}.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:0 7px 24px rgba(20,32,51,.055)}.card h2{margin:0 0 10px;font-size:17px;display:flex;align-items:center;gap:8px}.badge{font-size:11px;font-weight:800;border-radius:999px;padding:4px 8px}.siri .badge{background:var(--siriSoft);color:var(--siri)}.axel .badge{background:var(--axelSoft);color:var(--axel)}.bus .badge{background:var(--busSoft);color:var(--bus)}.row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px solid var(--line)}.row:first-of-type{border-top:0}.label{font-size:13px;color:var(--muted)}.value{font-weight:800;text-align:right}.bigtime{font-size:34px;font-weight:900;letter-spacing:-.04em;color:var(--bus);line-height:1}.route{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:13px;border-radius:15px;background:var(--busSoft);margin-top:9px}.route .line{width:43px;height:43px;border-radius:50%;display:grid;place-items:center;background:var(--bus);color:#fff;font-weight:900}.route .times{font-weight:900;font-size:17px}.route .meta{font-size:11px;color:var(--muted);margin-top:2px}.route .count{font-size:12px;font-weight:800;color:var(--bus);text-align:right}.route.cancelled{opacity:.55;text-decoration:line-through}.note{font-size:12px;line-height:1.45;color:var(--muted);margin-top:10px}.activity{display:flex;gap:11px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line)}.activity:first-of-type{border-top:0}.dot{width:10px;height:10px;border-radius:50%;margin-top:5px;flex:0 0 auto}.dot.siri{background:var(--siri)}.dot.axel{background:var(--axel)}.dot.bus{background:var(--bus)}.activity strong{display:block;font-size:14px}.activity small{color:var(--muted)}.toolbar{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}button{border:0;border-radius:13px;padding:12px 13px;font:inherit;font-weight:800;background:#111827;color:#fff}button.secondary{background:#eef1f5;color:#243047}.settings{margin-top:12px}.settings details{background:#fff;border:1px solid var(--line);border-radius:18px;padding:13px 14px}summary{cursor:pointer;font-weight:850}.field{margin-top:12px}.field label{display:block;font-size:12px;font-weight:800;color:var(--muted);margin-bottom:5px}input{width:100%;border:1px solid #d5dae2;border-radius:11px;padding:11px 12px;font:inherit;background:#fff}.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}.status{margin-top:9px;font-size:12px;color:var(--muted)}.warn{background:var(--warnSoft);border:1px solid #fed7aa;color:#92400e;border-radius:14px;padding:11px;font-size:12px;line-height:1.45;margin-top:10px}footer{text-align:center;color:#8a93a3;font-size:11px;margin:20px 0 4px}@media(min-width:680px){.grid.main{grid-template-columns:1fr 1fr}.card.buscard{grid-column:1/-1}}
+
+.traincard{grid-column:1/-1}
+.train-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.train-direction{background:#f7f5ff;border:1px solid #ddd6fe;border-radius:15px;padding:12px}
+.train-direction h3{margin:0 0 8px;font-size:13px;color:#5b4aa3}
+.trainrow{display:grid;grid-template-columns:52px 1fr auto;gap:8px;align-items:center;padding:8px 0;border-top:1px solid #e8e5f4}
+.trainrow:first-of-type{border-top:0}
+.train-time{font-size:18px;font-weight:900;color:#4338ca}
+.train-time .planned{font-size:11px;font-weight:600;color:var(--muted);text-decoration:line-through;margin-left:3px}
+.train-meta{font-size:11px;color:var(--muted);line-height:1.25}
+.train-dest{font-size:13px;font-weight:800}
+.train-status{text-align:right;font-size:11px;font-weight:800}
+.train-status.ok{color:#278357}.train-status.late{color:#b45309}.train-status.cancelled{color:#b91c1c}
+.train-empty{font-size:12px;color:var(--muted);padding:7px 0}
+@media(max-width:560px){.train-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -22,7 +38,7 @@
 <section class="card"><h2>🗓️ Den här veckan</h2><div id="week"></div></section>
 </div>
 <div class="settings"><details><summary>⚙️ Trafiklab-inställningar</summary><div class="warn">Version 1 sparar API-nyckeln endast i den här webbläsarens lokala lagring. För en publik webbplats bör vi senare lägga ett proxy-lager framför Trafiklab.</div><div class="field"><label>Trafiklab API-nyckel</label><input id="apiKey" type="password" autocomplete="off" placeholder="Klistra in din nyckel"></div><div class="two"><div class="field"><label>Roteby, hållplats-id</label><input id="rotebyId" placeholder="7400…"></div><div class="field"><label>Sundbyvägen Sundby Park, hållplats-id</label><input id="sundbyId" placeholder="7400…"></div></div><div class="field"><label>Eskilstunavägen 9, hållplats-id</label><input id="kulturId" placeholder="7400…"></div><div class="toolbar"><button id="saveSettings">Spara</button><button class="secondary" id="findStops">Sök hållplatser</button></div><div class="status" id="settingsStatus"></div></details></div>
-<footer>Data från Trafiklab.se • Familjepanel v1</footer>
+<footer>Data från Trafiklab.se • Familjepanel v2</footer>
 </div>
 <script>
 const TZ='Europe/Stockholm', schoolEndSiri={1:'14.00',2:'14.10',3:'14.00',4:'14.00',5:'14.20'}, schoolEndAxel={1:'13.30',2:'13.30',3:'14.00',4:'14.00',5:'13.30'}, holidays=['2026-09-23','2026-10-26','2026-10-27','2026-10-28','2026-10-29','2026-10-30'], termStart='2026-08-19',termEnd='2026-12-18';let showAll=false;
@@ -32,7 +48,93 @@ function renderStatic(){const n=localNow(),p=todayPlan(n),h=n.getHours();today.t
 function renderPlannedBus(){const n=localNow(),p=todayPlan(n),hm=`${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;let title='Ingen skolbuss planerad i dag',big='–',hint='';if(p.school&&hm<'09:00'){title='Till skolan • linje 325';big='07.54';hint=`Roteby → Sundby Park • ${countdown('07:54')}`}else if(p.school&&p.dow===2&&hm<'15:10'){title='Siri till Kulturskolan • linje 325';big='14.40';hint='Sundby Park → Eskilstunavägen 9 • reserv 631 kl. 14.43'}else if(p.school&&p.dow!==2&&hm<'15:15'){title='Siri & Axel hem • linje 325';big='14.40';hint='Sundby Park → Roteby • reserv 631 kl. 14.43'}busTitle.textContent=title;busBig.textContent=big;busHint.textContent=hint}
 function getSettings(){return{key:localStorage.getItem('trafiklab_key')||'',roteby:localStorage.getItem('roteby_id')||'',sundby:localStorage.getItem('sundby_id')||'',kultur:localStorage.getItem('kultur_id')||''}}function fillSettings(){const s=getSettings();apiKey.value=s.key;rotebyId.value=s.roteby;sundbyId.value=s.sundby;kulturId.value=s.kultur}async function trafiklab(path){const s=getSettings();if(!s.key)throw new Error('Ingen API-nyckel sparad.');const r=await fetch(`https://realtime-api.trafiklab.se/v1${path}${path.includes('?')?'&':'?'}key=${encodeURIComponent(s.key)}`);if(!r.ok)throw new Error(`Trafiklab svarade ${r.status}.`);return r.json()}function routeNumber(x){return String(x.route?.short_name||x.route?.designation||x.route?.name||x.route?.id||'')}function depTime(x){const raw=x.realtime||x.scheduled;return raw?raw.slice(11,16):'–'}function chooseStop(){const n=localNow(),p=todayPlan(n),s=getSettings(),hm=`${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;if(!p.school)return null;if(hm<'09:00')return{id:s.roteby,lines:['325']};return{id:s.sundby,lines:['325','631']}}
 async function loadDepartures(){const s=getSettings(),q=chooseStop();if(!s.key||!q||!q.id){apiStatus.textContent=!s.key?'Lägg in Trafiklab-nyckeln under inställningar.':'Hållplats-id saknas eller ingen skolbuss är aktuell just nu.';departures.innerHTML='';return}apiStatus.textContent='Hämtar Trafiklab…';try{const data=await trafiklab(`/departures/${encodeURIComponent(q.id)}`),list=(data.departures||data.timetable||data.entries||[]).filter(x=>showAll||q.lines.includes(routeNumber(x))).slice(0,8);busMode.textContent='TRAFIKLAB';departures.innerHTML=list.length?list.map(x=>{const no=routeNumber(x)||'?',time=depTime(x),dest=x.route?.destination?.name||x.destination?.name||x.destination||'',rt=x.is_realtime?' • realtid':' • tidtabell';return `<div class="route ${x.canceled?'cancelled':''}"><div class="line">${no}</div><div><div class="times">${time}</div><div class="meta">${dest}${rt}</div></div><div class="count">${countdown(time)}</div></div>`}).join(''):'<div class="note">Inga matchande avgångar hittades de kommande 60 minuterna.</div>';apiStatus.textContent=`Uppdaterad ${new Date().toLocaleTimeString('sv-SE',{hour:'2-digit',minute:'2-digit'})}.`}catch(e){apiStatus.textContent=`Kunde inte hämta Trafiklab: ${e.message}`}}
-saveSettings.onclick=()=>{localStorage.setItem('trafiklab_key',apiKey.value.trim());localStorage.setItem('roteby_id',rotebyId.value.trim());localStorage.setItem('sundby_id',sundbyId.value.trim());localStorage.setItem('kultur_id',kulturId.value.trim());settingsStatus.textContent='Sparat på den här enheten.';loadDepartures()};findStops.onclick=async()=>{settingsStatus.textContent='Söker…';try{const names=['Roteby','Sundbyvägen Sundby Park','Eskilstunavägen 9'],out=[];for(const n of names){const d=await trafiklab(`/stops/name/${encodeURIComponent(n)}`),groups=d.stop_groups||[];out.push(`${n}: ${groups.slice(0,3).map(g=>`${g.name} (${g.id})`).join(', ')||'ingen träff'}`)}settingsStatus.innerHTML=out.join('<br>')}catch(e){settingsStatus.textContent=e.message}};refresh.onclick=loadDepartures;toggleAll.onclick=()=>{showAll=!showAll;toggleAll.textContent=showAll?'Visa bara 325/631':'Visa alla bussar';loadDepartures()};fillSettings();renderStatic();loadDepartures();setInterval(()=>{renderStatic();loadDepartures()},60000);if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+
+const STRANGNAS_STATION='740000108';
+const STOCKHOLM_C='740000001';
+
+async function resrobotDepartures(originId){
+  const s=getSettings();
+  if(!s.resrobot) throw new Error('Ingen ResRobot-nyckel sparad.');
+  const params=new URLSearchParams({
+    id:originId,
+    format:'json',
+    accessId:s.resrobot,
+    products:'22',
+    duration:'240',
+    maxJourneys:'12',
+    passlist:'1',
+    lang:'sv'
+  });
+  const r=await fetch(`https://api.resrobot.se/v2.1/departureBoard?${params.toString()}`);
+  if(!r.ok) throw new Error(`ResRobot svarade ${r.status}.`);
+  const data=await r.json();
+  if(data.errorCode) throw new Error(data.errorText||data.errorCode);
+  return data.Departure||[];
+}
+function hhmm(v){return v?String(v).slice(0,5):'–'}
+function minsBetween(a,b){
+  if(!a||!b)return 0;
+  const [ah,am]=a.slice(0,5).split(':').map(Number);
+  const [bh,bm]=b.slice(0,5).split(':').map(Number);
+  return (bh*60+bm)-(ah*60+am);
+}
+function destinationStop(dep,destId){
+  const stops=dep.Stops?.stop || dep.Stops || [];
+  return Array.isArray(stops) ? stops.find(x=>String(x.extId)===String(destId)) : null;
+}
+function trainPasses(dep,destId){
+  return Boolean(destinationStop(dep,destId));
+}
+function renderTrainRows(list,destId){
+  return list.slice(0,2).map(dep=>{
+    const scheduled=hhmm(dep.time);
+    const realtime=hhmm(dep.rtTime)||scheduled;
+    const actual=(dep.rtTime?hhmm(dep.rtTime):scheduled);
+    const delay=dep.rtTime?minsBetween(scheduled,actual):0;
+    const dest=destinationStop(dep,destId);
+    const arrival=dest?hhmm(dest.arrTime):'–';
+    const track=dep.rtTrack||dep.rtDepTrack||dep.track||'';
+    const cancelled=(dep.JourneyStatus==='CANCELLED'||dep.cancelled===true||dep.reachable===false);
+    const status=cancelled?'Inställt':delay>0?`+${delay} min`:'I tid';
+    const cls=cancelled?'cancelled':delay>0?'late':'ok';
+    const planned=(dep.rtTime && hhmm(dep.rtTime)!==scheduled)?`<span class="planned">${scheduled}</span>`:'';
+    return `<div class="trainrow">
+      <div class="train-time">${actual}${planned}</div>
+      <div><div class="train-dest">${dep.name||'Tåg'} → ${dest?.name||''}</div>
+      <div class="train-meta">${arrival!=='–'?`Framme ${arrival}`:''}${track?` • spår ${track}`:''}</div></div>
+      <div class="train-status ${cls}">${status}</div>
+    </div>`;
+  }).join('');
+}
+async function loadTrains(){
+  const s=getSettings();
+  const out=document.getElementById('trainToStockholm');
+  const back=document.getElementById('trainToStrangnas');
+  const status=document.getElementById('trainStatus');
+  if(!s.resrobot){
+    out.innerHTML=back.innerHTML='<div class="train-empty">Lägg in ResRobot-nyckeln under Trafiklab-inställningar.</div>';
+    status.textContent='';
+    return;
+  }
+  status.textContent='Hämtar tåg…';
+  try{
+    const [fromStrangnas,fromStockholm]=await Promise.all([
+      resrobotDepartures(STRANGNAS_STATION),
+      resrobotDepartures(STOCKHOLM_C)
+    ]);
+    const toStockholm=fromStrangnas.filter(d=>trainPasses(d,STOCKHOLM_C)).slice(0,2);
+    const toStrangnas=fromStockholm.filter(d=>trainPasses(d,STRANGNAS_STATION)).slice(0,2);
+    out.innerHTML=toStockholm.length?renderTrainRows(toStockholm,STOCKHOLM_C):'<div class="train-empty">Inga direkta tåg hittades de kommande fyra timmarna.</div>';
+    back.innerHTML=toStrangnas.length?renderTrainRows(toStrangnas,STRANGNAS_STATION):'<div class="train-empty">Inga direkta tåg hittades de kommande fyra timmarna.</div>';
+    status.textContent=`Tåg uppdaterade ${new Date().toLocaleTimeString('sv-SE',{hour:'2-digit',minute:'2-digit'})}. Realtid visas när ResRobot levererar den.`;
+  }catch(e){
+    out.innerHTML=back.innerHTML='<div class="train-empty">Kunde inte hämta tågdata.</div>';
+    status.textContent=`ResRobot: ${e.message}`;
+  }
+}
+
+
+saveSettings.onclick=()=>{localStorage.setItem('trafiklab_key',apiKey.value.trim());localStorage.setItem('roteby_id',rotebyId.value.trim());localStorage.setItem('sundby_id',sundbyId.value.trim());localStorage.setItem('kultur_id',kulturId.value.trim());settingsStatus.textContent='Sparat på den här enheten.';loadDepartures()};findStops.onclick=async()=>{settingsStatus.textContent='Söker…';try{const names=['Roteby','Sundbyvägen Sundby Park','Eskilstunavägen 9'],out=[];for(const n of names){const d=await trafiklab(`/stops/name/${encodeURIComponent(n)}`),groups=d.stop_groups||[];out.push(`${n}: ${groups.slice(0,3).map(g=>`${g.name} (${g.id})`).join(', ')||'ingen träff'}`)}settingsStatus.innerHTML=out.join('<br>')}catch(e){settingsStatus.textContent=e.message}};refresh.onclick=()=>{loadDepartures();loadTrains();};toggleAll.onclick=()=>{showAll=!showAll;toggleAll.textContent=showAll?'Visa bara 325/631':'Visa alla bussar';loadDepartures()};fillSettings();renderStatic();loadDepartures();setInterval(()=>{renderStatic();loadDepartures()},60000);if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
 </script>
 </body>
 </html>
