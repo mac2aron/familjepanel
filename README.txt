@@ -1,36 +1,45 @@
-FAMILJEPANEL V5
+FAMILJEPANEL V6 – SKOLLUNCH
 
 NYTT
-- Kompakt väderkort för Strängnäs uppe till höger om hälsningen på större skärmar.
-- Aktuell temperatur.
-- Upplevd temperatur.
-- Vind i m/s.
-- Nederbörd när det faktiskt regnar/snöar.
-- Fyra prognospunkter över cirka sex timmar.
-- Praktiskt väderråd, t.ex.:
-  • Regnjacka – regn väntas runt 16:00
-  • Blåsigt – upp till 10 m/s
-  • Svalt – jacka kan vara skön
-  • Soligt och varmt – solskydd kan vara bra
-  • Snö möjlig
-  • Åskrisk
-- Open-Meteo används direkt och kräver ingen API-nyckel.
-- På mobil lägger sig väderkortet kompakt under hälsningen.
-- Panelens maxbredd är ökad till 980 px för bättre användning på surfplatta.
+- Barnkortens "Efter skolan" är ersatt med "Skollunch".
+- Siri: första rätten från Friskolan Askens aktuella meny.
+- Axel: dagens rätt från Skolmaten.se RSS.
+- Aktiviteter ligger fortsatt i kalenderdelen.
+- Lunch hämtas via Cloudflare Worker och uppdateras automatiskt.
+- Worker cache: 15 minuter.
+- Panelen uppdaterar lunch var 30:e minut.
+- På helg/lov visar panelen "Ingen skollunch idag".
 
-BEHÅLLER
-- Kalender via Cloudflare Worker
-- Kommande 7 dagar
-- Skol- och bussrutiner filtrerade från kalenderlistorna
-- Trafiklab och ResRobot via Worker
-- Smarta bussresor
-- Två tåg åt vardera hållet
+GÖR SÅ HÄR
 
-GITHUB PAGES
-Ersätt:
-- index.html
-- sw.js
+1. CLOUDFLARE
+   - Öppna familjepanel-calendar → Edit code.
+   - Ersätt HELA befintliga worker.js med innehållet i worker_v6_FULL.txt.
+   - Deploy.
+   - Inga nya Secrets behövs.
 
-manifest.webmanifest kan också ersättas.
+2. TESTA WORKERN
+   GET:
+   https://familjepanel-calendar.7ydb66wf9r.workers.dev/school-lunch
 
-Commit till main, vänta på Pages och kör Ctrl+F5.
+   Header:
+   Authorization: Bearer DIN_PANEL_TOKEN
+
+   Du ska få JSON med:
+   siri.meal
+   axel.meal
+   errors
+
+3. GITHUB PAGES
+   När testet fungerar:
+   - ersätt index.html
+   - ersätt sw.js
+   - commit till main
+   - vänta på Pages
+   - Ctrl+F5
+
+OBS
+Asken parsas från skolans publika HTML-sida.
+Karlavagnen parsas från Skolmaten.se RSS.
+Om någon av skolorna ändrar teknisk struktur kan den källan behöva justeras,
+men den andra fortsätter fungera separat.

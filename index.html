@@ -105,6 +105,9 @@ footer{text-align:center;color:#8a93a3;font-size:11px;margin:20px 0 4px}
 .calendar-source{font-size:10px;font-weight:800;padding:3px 6px;border-radius:999px;background:#f1f5f9;color:#475569;white-space:nowrap}
 .day-group{padding-top:4px}.day-label{font-size:12px;font-weight:900;color:#334155;padding:9px 0 3px}
 .calendar-empty{font-size:12px;color:var(--muted);padding:7px 0}
+
+.lunch-value{font-size:12px;line-height:1.25;max-width:62%;text-align:right}
+@media(max-width:560px){.lunch-value{max-width:64%;font-size:11px}}
 </style>
 </head>
 <body>
@@ -128,14 +131,14 @@ footer{text-align:center;color:#8a93a3;font-size:11px;margin:20px 0 4px}
       <h2>👧 Siri <span class="badge">ASKEN</span></h2>
       <div class="row"><span class="label">Skoldag</span><span class="value" id="siriSchool">–</span></div>
       <div class="row"><span class="label">Slutar</span><span class="value" id="siriEnd">–</span></div>
-      <div class="row"><span class="label">Efter skolan</span><span class="value" id="siriAfter">–</span></div>
+      <div class="row"><span class="label">🍽️ Skollunch</span><span class="value lunch-value" id="siriAfter">Hämtar…</span></div>
     </section>
 
     <section class="card axel">
       <h2>👦 Axel <span class="badge">KARLAVAGNEN</span></h2>
       <div class="row"><span class="label">Skoldag</span><span class="value" id="axelSchool">–</span></div>
       <div class="row"><span class="label">Slutar</span><span class="value" id="axelEnd">–</span></div>
-      <div class="row"><span class="label">Efter skolan</span><span class="value" id="axelAfter">–</span></div>
+      <div class="row"><span class="label">🍽️ Skollunch</span><span class="value lunch-value" id="axelAfter">Hämtar…</span></div>
     </section>
 
     <section class="card bus buscard">
@@ -174,7 +177,7 @@ footer{text-align:center;color:#8a93a3;font-size:11px;margin:20px 0 4px}
   <div class="settings">
     <details>
       <summary>⚙️ Trafiklab-inställningar</summary>
-      <div class="warn">Version 5 använder Cloudflare Worker för kalender, buss och tåg samt Open-Meteo för kompakt väder i Strängnäs.</div>
+      <div class="warn">Version 6 använder Cloudflare Worker för kalender, buss, tåg och dagens skollunch samt Open-Meteo för väder i Strängnäs.</div>
 
       <div class="field">
         <label>Kalender-Worker</label>
@@ -210,7 +213,7 @@ footer{text-align:center;color:#8a93a3;font-size:11px;margin:20px 0 4px}
     </details>
   </div>
 
-  <footer>Data från Trafiklab.se • Familjepanel v5</footer>
+  <footer>Data från Trafiklab.se • Familjepanel v6</footer>
 </div>
 
 <script>
@@ -247,8 +250,10 @@ function renderStatic(){
   axelSchool.textContent=p.school?'08.30':'Ledig';
   siriEnd.textContent=p.school?schoolEndSiri[p.dow]:'–';
   axelEnd.textContent=p.school?schoolEndAxel[p.dow]:'–';
-  siriAfter.textContent=p.siriAfter;
-  axelAfter.textContent=p.axelAfter;
+  if(!p.school){
+    siriAfter.textContent='Ingen skollunch idag';
+    axelAfter.textContent='Ingen skollunch idag';
+  }
   renderPlannedBus();
 }
 
@@ -668,6 +673,36 @@ async function loadWeather(){
   }
 }
 
+
+async function loadSchoolLunch(){
+  const p=todayPlan(localNow());
+
+  if(!p.school){
+    siriAfter.textContent='Ingen skollunch idag';
+    axelAfter.textContent='Ingen skollunch idag';
+    return;
+  }
+
+  siriAfter.textContent='Hämtar…';
+  axelAfter.textContent='Hämtar…';
+
+  try{
+    const data=await workerApi('/school-lunch');
+
+    siriAfter.textContent=
+      data.siri?.meal ||
+      'Meny saknas';
+
+    axelAfter.textContent=
+      data.axel?.meal ||
+      'Meny saknas';
+
+  }catch(e){
+    siriAfter.textContent='Kunde inte hämta menyn';
+    axelAfter.textContent='Kunde inte hämta menyn';
+  }
+}
+
 saveSettings.onclick=()=>{
   localStorage.setItem('calendar_worker_url',calendarWorkerUrl.value.trim());
   localStorage.setItem('calendar_panel_token',panelToken.value.trim());
@@ -675,12 +710,12 @@ saveSettings.onclick=()=>{
   localStorage.setItem('sundby_id',sundbyId.value.trim());
   localStorage.setItem('kultur_id',kulturId.value.trim());
   settingsStatus.textContent='Sparat på den här enheten.';
-  renderPlannedBus();loadDepartures();loadTrains();loadCalendar();
+  renderPlannedBus();loadDepartures();loadTrains();loadCalendar();loadSchoolLunch();
 };
 
 findStops.onclick=()=>{settingsStatus.textContent='Hållplats-id är redan förifyllda. Ändra dem manuellt här om det behövs.';};
 
-refresh.onclick=()=>{renderPlannedBus();loadDepartures();loadTrains();loadCalendar();loadWeather()};
+refresh.onclick=()=>{renderPlannedBus();loadDepartures();loadTrains();loadCalendar();loadWeather();loadSchoolLunch()};
 toggleAll.onclick=()=>{showAll=!showAll;toggleAll.textContent=showAll?'Visa bara 325/631':'Visa alla bussar';loadDepartures()};
 
 fillSettings();
@@ -689,8 +724,10 @@ loadDepartures();
 loadTrains();
 loadCalendar();
 loadWeather();
+loadSchoolLunch();
 setInterval(()=>{renderStatic();loadDepartures();loadTrains();loadCalendar()},60000);
 setInterval(loadWeather,15*60*1000);
+setInterval(loadSchoolLunch,30*60*1000);
 
 if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
 </script>

@@ -1,4 +1,4 @@
-const CACHE='familjepanel-v5';
+const CACHE='familjepanel-v6';
 const ASSETS=['./','./index.html','./manifest.webmanifest'];
 
 self.addEventListener('install',e=>{
