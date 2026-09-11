@@ -3,8 +3,8 @@
   "short_name": "Familjepanel",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#f4f6f8",
-  "theme_color": "#111827",
+  "background_color": "#f2f2f7",
+  "theme_color": "#f2f2f7",
   "lang": "sv",
   "description": "Familjepanel för skola, skollunch, kalender, bussar, tåg och väder."
 }

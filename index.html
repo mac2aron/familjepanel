@@ -3,7 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#111827">
+<meta name="theme-color" content="#f2f2f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#171719" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="manifest" href="manifest.webmanifest">
 <title>Familjepanel • Siri & Axel</title>
 <style>
@@ -108,6 +110,26 @@ footer{text-align:center;color:#8a93a3;font-size:11px;margin:20px 0 4px}
 
 .lunch-value{font-size:12px;line-height:1.25;max-width:62%;text-align:right}
 @media(max-width:560px){.lunch-value{max-width:64%;font-size:11px}}
+/* Familjepanel v7: presentation layer over the unchanged v6 data logic. */
+:root{--bg:#f2f2f7;--card:#fff;--ink:#1d1d1f;--muted:#626269;--line:#e5e5ea;--siri:#b52f60;--siriSoft:#fbeaf0;--axel:#1763ad;--axelSoft:#eaf2fc;--bus:#22764b;--busSoft:#eef6f0;--train:#6452a3;--trainSoft:#f3f1f8;--warnSoft:#fff4e5;--accent:#0066cc;--shadow:0 2px 4px #20203803,0 12px 28px #20203805}
+html{font-size:16px;color-scheme:light}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.45;-webkit-font-smoothing:antialiased}
+.app{max-width:1180px;padding: max(20px,env(safe-area-inset-top)) max(20px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(20px,env(safe-area-inset-left))}
+.hero{grid-template-columns:minmax(0,1fr) minmax(300px,390px);gap:24px;padding:0 2px 22px}.kicker{font-size:.875rem;font-weight:500;letter-spacing:0;text-transform:none}.date{font-size:1rem;margin-top:8px}h1{font-size:clamp(2rem,4vw,2.75rem);font-weight:650;letter-spacing:-.035em;line-height:1.12;margin:5px 0}.view-button{margin-top:16px;min-height:44px;background:var(--card);color:var(--accent);border:1px solid var(--line);padding:8px 14px;font-size:.875rem;font-weight:600;display:inline-flex;align-items:center;gap:8px}
+.grid{gap:16px}.grid.main{align-items:start}.card{border:1px solid rgba(120,120,128,.12);border-radius:24px;padding:22px;box-shadow:var(--shadow);min-width:0}.card h2{font-size:1.0625rem;font-weight:600;line-height:1.35;gap:10px;margin-bottom:16px;flex-wrap:wrap}.badge{font-size:.75rem;font-weight:600;letter-spacing:0;padding:4px 8px}.card h2 .badge{margin-left:auto}.symbol{width:22px;height:22px;flex-shrink:0;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.avatar{display:grid;place-items:center;width:36px;height:36px;border-radius:12px;font-size:1rem;font-weight:600;background:var(--siriSoft);color:var(--siri)}.axel .avatar{background:var(--axelSoft);color:var(--axel)}
+.school-times{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:8px 0 18px}.school-times .row{display:flex;flex-direction:column;align-items:flex-start;gap:3px;border:0;padding:0}.school-times .value{font-size:1.875rem;font-weight:600;line-height:1.2;letter-spacing:-.03em}.label{font-size:.875rem}.lunch-row{display:block;padding-top:14px;padding-bottom:0}.lunch-row .label{display:block;margin-bottom:5px}.lunch-value{display:block;text-align:left;max-width:none;font-size:1rem;font-weight:400;line-height:1.5;overflow-wrap:anywhere}.value,.bigtime,.times,.train-time,.weather-temp{font-variant-numeric:tabular-nums}
+.weather-compact{min-width:0;max-width:none;border-radius:22px;padding:16px 18px;background:rgba(255,255,255,.8);box-shadow:var(--shadow);border:1px solid rgba(120,120,128,.12)}.weather-top{gap:12px}.weather-icon{font-size:34px}.weather-place{font-size:.8125rem;font-weight:500;text-transform:none;letter-spacing:0}.weather-temp{font-size:2rem;font-weight:500}.weather-meta{font-size:.8125rem;white-space:normal}.weather-advice{font-size:.875rem;font-weight:500;white-space:normal;overflow:visible}.weather-hours{margin-top:10px;padding-top:10px}.weather-hour-time,.weather-hour-temp{font-size:.8125rem;font-weight:500}.weather-hour-icon{font-size:19px}.weather-error{font-size:.875rem}
+.bigtime{font-size:2.75rem;font-weight:600;letter-spacing:-.04em;margin-top:8px;color:var(--ink)}.route{grid-template-columns:40px minmax(0,1fr) auto;gap:10px;background:var(--busSoft);border-radius:14px;padding:12px}.route .line{width:38px;height:32px;border-radius:8px;font-size:.9375rem;font-weight:600}.route .times{font-size:1.125rem;font-weight:600}.route .meta{font-size:.8125rem;line-height:1.4;overflow-wrap:anywhere}.route .bus-status{font-size:.8125rem;font-weight:600}.bus-state{font-size:.875rem;font-weight:500}.note,.status{font-size:.8125rem;line-height:1.5}.note:empty,.status:empty{display:none}.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}button{min-height:44px;border-radius:12px;padding:10px 16px;background:var(--accent);font-weight:600;font-size:.9375rem;cursor:pointer}button.secondary{background:var(--bg);color:var(--accent)}button:hover{filter:brightness(.96)}button:active{transform:translateY(1px)}:focus-visible{outline:3px solid var(--accent);outline-offset:4px}
+.train-direction{background:transparent;border:0;border-radius:0;padding:0}.train-direction h3{font-size:.875rem;color:var(--muted);font-weight:500}.train-grid{gap:18px}.trainrow{grid-template-columns:minmax(72px,auto) minmax(0,1fr) auto;border-color:var(--line);padding:12px 0}.train-time{font-size:1.25rem;font-weight:600;color:var(--ink);line-height:1.4}.train-time .planned,.train-time .arrow{font-size:.8125rem;font-weight:400}.train-title{font-size:.875rem;font-weight:500}.train-meta,.train-status{font-size:.8125rem;font-weight:400}.train-status{font-weight:500}.train-empty,.calendar-empty{font-size:.875rem;line-height:1.5}
+.calendar-event{grid-template-columns:4px minmax(0,1fr) auto;gap:12px;padding:12px 0}.calendar-dot{width:4px;height:28px;border-radius:4px;margin-top:3px}.calendar-title{font-size:1rem;font-weight:500;overflow-wrap:anywhere}.calendar-meta{font-size:.875rem;line-height:1.45}.calendar-source{font-size:.75rem;font-weight:500;max-width:110px;white-space:normal;background:var(--bg);color:var(--muted)}.day-label{font-size:.875rem;font-weight:600;color:var(--muted);padding-top:16px}.settings{margin-top:20px}.settings details{background:var(--card);border-radius:18px;border-color:var(--line);padding:6px 16px}.settings summary{min-height:44px;align-content:center;font-size:.9375rem;font-weight:500}.field label{font-size:.875rem;font-weight:500}.warn{font-size:.875rem;background:var(--bg);border-color:var(--line);color:var(--muted)}input{min-height:44px;color:var(--ink);background:var(--card);border-color:var(--line)}footer{font-size:.75rem;color:var(--muted);margin-top:18px}
+@media(min-width:680px){.grid.main{grid-template-columns:repeat(2,minmax(0,1fr))}.card.siri,.card.axel{align-self:stretch}}
+@media(min-width:960px){.card.buscard,.card.traincard{grid-column:auto;align-self:stretch}.train-grid{grid-template-columns:1fr}.train-direction+.train-direction{border-top:1px solid var(--line);padding-top:14px}}
+@media(max-width:679px){.app{padding: max(16px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}.hero{grid-template-columns:1fr;gap:18px;padding-bottom:18px}.hero-copy{position:relative;padding-right:98px}.view-button{position:absolute;right:0;top:0;margin-top:0;padding:8px 10px}.view-button .symbol{display:none}h1{font-size:2rem}.card{padding:20px;border-radius:22px}.weather-compact{width:100%;padding:16px}.grid{gap:14px}.train-grid{grid-template-columns:1fr}.card h2{font-size:1rem}.calendar-event{grid-template-columns:4px minmax(0,1fr)}.calendar-source{grid-column:2;justify-self:start;margin-top:-5px;max-width:none}.toolbar>*{flex:1}.two{grid-template-columns:1fr}}
+@media(max-width:360px){.route{grid-template-columns:36px minmax(0,1fr)}.route .bus-status{grid-column:2;text-align:left}.trainrow{grid-template-columns:1fr 1fr}.train-status{grid-column:2}.hero-copy{padding-right:0}.view-button{position:static;margin-top:12px}}
+@media(min-width:960px){html.kiosk .app{max-width:1400px;padding-top:max(12px,env(safe-area-inset-top))}html.kiosk .hero{padding-bottom:14px}html.kiosk .grid{gap:12px}html.kiosk .card{padding:18px}html.kiosk .school-times{margin-bottom:12px}html.kiosk .card h2{margin-bottom:12px}html.kiosk .weather-hours{margin-top:6px;padding-top:6px}html.kiosk h1{font-size:2rem}}
+@media(prefers-color-scheme:dark){:root{--bg:#171719;--card:#242427;--ink:#f5f5f7;--muted:#b1b1ba;--line:#3b3b40;--siri:#ff8aaf;--siriSoft:#452938;--axel:#84bcff;--axelSoft:#243a53;--bus:#85d6a6;--busSoft:#273b30;--train:#c0aff0;--trainSoft:#343040;--accent:#83baff;--shadow:none}html{color-scheme:dark}.weather-compact{background:#242427}.route .line{background:#357951;color:#fff}button{background:#a1caff;color:#172334}button.secondary,.view-button{background:var(--card);color:var(--accent)}.bus-status.ok,.train-status.ok{color:#8ad4a4}.bus-status.late,.train-status.late{color:#ffc27c}.bus-status.bad,.train-status.cancelled{color:#ff9696}.bus-status.plan{color:var(--muted)}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}button:active{transform:none}}
+@media(min-width:960px){html.kiosk #weatherContent{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px}html.kiosk .weather-hours{margin:0;padding:0;border:0;align-self:center}html.kiosk .weather-advice{grid-row:2;grid-column:1/-1;margin-top:0}html.kiosk .hero{align-items:center}}
+
 </style>
 </head>
 <body>
@@ -117,6 +139,7 @@ footer{text-align:center;color:#8a93a3;font-size:11px;margin:20px 0 4px}
       <div class="kicker">Familjen</div>
       <h1 id="greeting">God morgon</h1>
       <div class="date" id="today"></div>
+<button class="view-button" id="kioskToggle" type="button" aria-pressed="false" title="Kompakt visning för bred iPad och väggskärm"><svg class="symbol" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 22h8m-4-4v4"/></svg><span>Skärmläge</span></button>
     </div>
 
     <aside class="weather-compact" aria-label="Väder i Strängnäs">
@@ -128,21 +151,19 @@ footer{text-align:center;color:#8a93a3;font-size:11px;margin:20px 0 4px}
 
   <div class="grid main">
     <section class="card siri">
-      <h2>👧 Siri <span class="badge">ASKEN</span></h2>
-      <div class="row"><span class="label">Skoldag</span><span class="value" id="siriSchool">–</span></div>
-      <div class="row"><span class="label">Slutar</span><span class="value" id="siriEnd">–</span></div>
-      <div class="row"><span class="label">🍽️ Skollunch</span><span class="value lunch-value" id="siriAfter">Hämtar…</span></div>
+      <h2><span class="avatar" aria-hidden="true">S</span> Siri <span class="badge">ASKEN</span></h2>
+      <div class="school-times"><div class="row"><span class="label">Börjar</span><span class="value" id="siriSchool">–</span></div><div class="row"><span class="label">Slutar</span><span class="value" id="siriEnd">–</span></div></div>
+      <div class="row lunch-row"><span class="label">Skollunch</span><span class="value lunch-value" id="siriAfter">Hämtar…</span></div>
     </section>
 
     <section class="card axel">
-      <h2>👦 Axel <span class="badge">KARLAVAGNEN</span></h2>
-      <div class="row"><span class="label">Skoldag</span><span class="value" id="axelSchool">–</span></div>
-      <div class="row"><span class="label">Slutar</span><span class="value" id="axelEnd">–</span></div>
-      <div class="row"><span class="label">🍽️ Skollunch</span><span class="value lunch-value" id="axelAfter">Hämtar…</span></div>
+      <h2><span class="avatar" aria-hidden="true">A</span> Axel <span class="badge">KARLAVAGNEN</span></h2>
+      <div class="school-times"><div class="row"><span class="label">Börjar</span><span class="value" id="axelSchool">–</span></div><div class="row"><span class="label">Slutar</span><span class="value" id="axelEnd">–</span></div></div>
+      <div class="row lunch-row"><span class="label">Skollunch</span><span class="value lunch-value" id="axelAfter">Hämtar…</span></div>
     </section>
 
     <section class="card bus buscard">
-      <h2>🚌 Nästa relevanta buss <span class="badge" id="busMode">PLANERAD</span></h2>
+      <h2><svg class="symbol" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="16" rx="3"/><path d="M5 11h14M8 19v2m8-2v2M8 15h1m6 0h1M9 6h6"/></svg> Nästa buss <span class="badge" id="busMode">PLANERAD</span></h2>
       <div class="label" id="busTitle">Laddar plan...</div>
       <div class="bigtime" id="busBig">–</div>
       <div class="note" id="busHint"></div>
@@ -156,7 +177,7 @@ footer{text-align:center;color:#8a93a3;font-size:11px;margin:20px 0 4px}
     </section>
 
     <section class="card traincard">
-      <h2>🚆 Tåg Strängnäs ↔ Stockholm <span class="badge" style="background:#ede9fe;color:#5b4aa3">RESROBOT</span></h2>
+      <h2><svg class="symbol" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="15" rx="4"/><path d="M5 10h14M9 3v7m6-7v7M8 14h1m6 0h1M9 18l-3 3m9-3 3 3"/></svg> Tåg <span class="badge" style="background:#ede9fe;color:#5b4aa3">RESROBOT</span></h2>
       <div class="train-grid">
         <div class="train-direction">
           <h3>Strängnäs → Stockholm C</h3>
@@ -170,38 +191,38 @@ footer{text-align:center;color:#8a93a3;font-size:11px;margin:20px 0 4px}
       <div class="status" id="trainStatus"></div>
     </section>
 
-    <section class="card"><h2>📌 I dag</h2><div id="agenda"></div></section>
-    <section class="card"><h2>🗓️ Kommande 7 dagar</h2><div id="week"></div></section>
+    <section class="card"><h2><svg class="symbol" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 11h18M8 15h2m4 0h2"/></svg> I dag</h2><div id="agenda"></div></section>
+    <section class="card"><h2><svg class="symbol" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 11h18M8 15h2m4 0h2"/></svg> Kommande 7 dagar</h2><div id="week"></div></section>
   </div>
 
   <div class="settings">
     <details>
-      <summary>⚙️ Trafiklab-inställningar</summary>
-      <div class="warn">Version 6 använder Cloudflare Worker för kalender, buss, tåg och dagens skollunch samt Open-Meteo för väder i Strängnäs.</div>
+      <summary>Inställningar</summary>
+      <div class="warn">Anslut panelen med era befintliga uppgifter. Inställningarna sparas på den här enheten. Skärmläge ger en kompakt layout på breda skärmar; skärmens autolås styrs på enheten.</div>
 
       <div class="field">
-        <label>Kalender-Worker</label>
+        <label for="calendarWorkerUrl">Kalender-Worker</label>
         <input id="calendarWorkerUrl" autocomplete="off" placeholder="https://familjepanel-calendar....workers.dev/">
       </div>
 
       <div class="field">
-        <label>Paneltoken för kalendern</label>
+        <label for="panelToken">Paneltoken för kalendern</label>
         <input id="panelToken" type="password" autocomplete="off" placeholder="Din PANEL_TOKEN från Cloudflare">
       </div>
 
       <div class="two">
         <div class="field">
-          <label>Roteby, hållplats-id</label>
-          <input id="rotebyId" placeholder="740038257">
+          <label for="rotebyId">Roteby, hållplats-id</label>
+        <input id="rotebyId" placeholder="740038257">
         </div>
         <div class="field">
-          <label>Sundbyvägen Sundby Park, hållplats-id</label>
-          <input id="sundbyId" placeholder="740021882">
+          <label for="sundbyId">Sundbyvägen Sundby Park, hållplats-id</label>
+        <input id="sundbyId" placeholder="740021882">
         </div>
       </div>
 
       <div class="field">
-        <label>Eskilstunavägen 9, hållplats-id</label>
+        <label for="kulturId">Eskilstunavägen 9, hållplats-id</label>
         <input id="kulturId" placeholder="740021879">
       </div>
 
@@ -213,7 +234,7 @@ footer{text-align:center;color:#8a93a3;font-size:11px;margin:20px 0 4px}
     </details>
   </div>
 
-  <footer>Data från Trafiklab.se • Familjepanel v6</footer>
+  <footer>Data från Trafiklab.se • Familjepanel v7</footer>
 </div>
 
 <script>
@@ -730,6 +751,13 @@ setInterval(loadWeather,15*60*1000);
 setInterval(loadSchoolLunch,30*60*1000);
 
 if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+</script>
+<script>
+// Device-local display preference; no changes to v6 fetching or scheduling.
+const kioskButton=document.getElementById('kioskToggle');
+function setKiosk(enabled){document.documentElement.classList.toggle('kiosk',enabled);kioskButton.setAttribute('aria-pressed',String(enabled));kioskButton.querySelector('span').textContent=enabled?'Standardläge':'Skärmläge';}
+try{setKiosk(localStorage.getItem('familjepanel_kiosk')==='1')}catch{}
+kioskButton.addEventListener('click',()=>{const enabled=!document.documentElement.classList.contains('kiosk');setKiosk(enabled);try{localStorage.setItem('familjepanel_kiosk',enabled?'1':'0')}catch{}});
 </script>
 </body>
 </html>
