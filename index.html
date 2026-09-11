@@ -110,7 +110,7 @@ footer{text-align:center;color:#8a93a3;font-size:11px;margin:20px 0 4px}
 
 .lunch-value{font-size:12px;line-height:1.25;max-width:62%;text-align:right}
 @media(max-width:560px){.lunch-value{max-width:64%;font-size:11px}}
-/* Familjepanel v7: presentation layer over the unchanged v6 data logic. */
+/* Familjepanel v8: presentation layer over the unchanged v6 data logic. */
 :root{--bg:#f2f2f7;--card:#fff;--ink:#1d1d1f;--muted:#626269;--line:#e5e5ea;--siri:#b52f60;--siriSoft:#fbeaf0;--axel:#1763ad;--axelSoft:#eaf2fc;--bus:#22764b;--busSoft:#eef6f0;--train:#6452a3;--trainSoft:#f3f1f8;--warnSoft:#fff4e5;--accent:#0066cc;--shadow:0 2px 4px #20203803,0 12px 28px #20203805}
 html{font-size:16px;color-scheme:light}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.45;-webkit-font-smoothing:antialiased}
 .app{max-width:1180px;padding: max(20px,env(safe-area-inset-top)) max(20px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(20px,env(safe-area-inset-left))}
@@ -130,6 +130,10 @@ html{font-size:16px;color-scheme:light}body{font-family:-apple-system,BlinkMacSy
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}button:active{transform:none}}
 @media(min-width:960px){html.kiosk #weatherContent{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px}html.kiosk .weather-hours{margin:0;padding:0;border:0;align-self:center}html.kiosk .weather-advice{grid-row:2;grid-column:1/-1;margin-top:0}html.kiosk .hero{align-items:center}}
 
+.hero{display:block;padding-bottom:12px}.hero-copy{padding:0}.hero h1{font-size:.9375rem;font-weight:400;color:var(--muted);margin:0 0 4px}.hero .date{font-size:1.5rem;line-height:1.25;letter-spacing:-.02em;color:var(--ink);font-weight:600;margin:0}.next-panel{margin:14px 0 12px;padding:12px 14px;border-radius:16px;background:var(--card);border:1px solid var(--line)}.next-label{font-size:.8125rem;font-weight:600;color:var(--accent)}#nextText{font-size:1rem;font-weight:500;margin-top:3px}#nextNote{font-size:.75rem;color:var(--muted);margin-top:3px}.weather-compact{width:100%;padding:12px 14px;border-radius:16px}.weather-line{display:flex;justify-content:space-between;gap:10px;align-items:center;font-size:1rem}.weather-line strong{font-size:1.25rem;font-weight:600}.weather-location{font-size:.8125rem;color:var(--muted)}.weather-advice{margin-top:3px;font-size:.875rem}.weather-compact summary{min-height:44px;font-weight:400;cursor:pointer}.weather-compact .weather-meta{margin-top:12px}.weather-hours{max-width:420px}.day-switch{display:flex;background:var(--line);padding:3px;border-radius:12px;margin:14px 0}.day-switch button{flex:1;background:transparent;color:var(--muted);min-height:44px;padding:7px 12px}.day-switch button[aria-pressed=true]{background:var(--card);color:var(--ink);box-shadow:0 1px 4px #0001}.school-card{grid-column:1/-1}.school-card h2{margin-bottom:2px}.school-date{color:var(--muted);font-size:.8125rem;margin-bottom:12px}.child-line{display:grid;grid-template-columns:minmax(80px,1fr) auto auto;gap:14px;align-items:center}.child-name{display:flex;align-items:center;gap:8px;font-weight:600}.child-line .avatar{width:30px;height:30px;border-radius:10px;font-size:.875rem}.child-time .label{display:block;font-size:.75rem}.child-time .value{font-size:1.25rem;font-weight:600}.child-lunch{font-size:.9375rem;line-height:1.45;margin:8px 0 0;overflow-wrap:anywhere}.child-lunch .label{font-size:.8125rem;margin-right:6px}.child-block+.child-block{border-top:1px solid var(--line);padding-top:14px;margin-top:14px}.event-detail,.train-detail{border-top:1px solid var(--line)}.event-detail:first-child,.train-detail:first-child{border-top:0}summary::-webkit-details-marker{display:none}.event-detail summary,.train-detail summary,#weatherDetails summary{list-style:none}.calendar-event{border:0;grid-template-columns:4px minmax(0,1fr) 16px;min-height:44px;cursor:pointer}.calendar-title,.calendar-meta{display:block}.detail-arrow{color:var(--muted)}.event-body{padding:0 0 14px 16px;font-size:.9375rem}.event-body p{margin:8px 0}.event-description{white-space:pre-wrap;overflow-wrap:anywhere}.map-link{display:inline-flex;align-items:center;min-height:44px;color:var(--accent);font-weight:500}.trainrow{grid-template-columns:62px minmax(0,1fr) auto;gap:8px;min-height:48px;border:0;cursor:pointer}.train-title{overflow-wrap:anywhere;font-size:.875rem}.train-status{font-size:.875rem}.train-expanded{padding:0 0 12px;font-size:.875rem;color:var(--muted);line-height:1.6}.settings .view-button{position:static;margin:12px 0;display:inline-flex}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}.live-label{font-size:.8125rem;color:var(--muted);margin-bottom:8px}
+@media(min-width:680px){.children{display:grid;grid-template-columns:1fr 1fr;gap:24px}.child-block+.child-block{border-top:0;border-left:1px solid var(--line);padding:0 0 0 24px;margin:0}.hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}.hero-copy{grid-column:1}.next-panel{grid-column:1;margin:0}.weather-compact{grid-column:2;grid-row:1/3}.day-switch{max-width:360px}.school-card{grid-column:1/-1}}
+@media(min-width:960px){html.kiosk #weatherContent{display:block}html.kiosk .weather-hours{margin-top:10px;padding-top:10px}html.kiosk h1{font-size:.9375rem}}
+@media(max-width:360px){.child-line{gap:8px}.child-time .value{font-size:1.125rem}.trainrow{grid-template-columns:56px minmax(0,1fr) auto}.train-status{grid-column:auto}.weather-line{flex-wrap:wrap}.app{padding-left:12px;padding-right:12px}.card{padding:16px}}
 </style>
 </head>
 <body>
@@ -139,9 +143,10 @@ html{font-size:16px;color-scheme:light}body{font-family:-apple-system,BlinkMacSy
       <div class="kicker">Familjen</div>
       <h1 id="greeting">God morgon</h1>
       <div class="date" id="today"></div>
-<button class="view-button" id="kioskToggle" type="button" aria-pressed="false" title="Kompakt visning för bred iPad och väggskärm"><svg class="symbol" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 22h8m-4-4v4"/></svg><span>Skärmläge</span></button>
+
     </div>
 
+<div class="next-panel"><div class="next-label">Nästa för er</div><div id="nextText">Hämtar dagens tider…</div><div id="nextNote"></div></div>
     <aside class="weather-compact" aria-label="Väder i Strängnäs">
       <div id="weatherContent">
         <div class="weather-error">Hämtar väder i Strängnäs…</div>
@@ -149,20 +154,10 @@ html{font-size:16px;color-scheme:light}body{font-family:-apple-system,BlinkMacSy
     </aside>
   </header>
 
-  <div class="grid main">
-    <section class="card siri">
-      <h2><span class="avatar" aria-hidden="true">S</span> Siri <span class="badge">ASKEN</span></h2>
-      <div class="school-times"><div class="row"><span class="label">Börjar</span><span class="value" id="siriSchool">–</span></div><div class="row"><span class="label">Slutar</span><span class="value" id="siriEnd">–</span></div></div>
-      <div class="row lunch-row"><span class="label">Skollunch</span><span class="value lunch-value" id="siriAfter">Hämtar…</span></div>
-    </section>
-
-    <section class="card axel">
-      <h2><span class="avatar" aria-hidden="true">A</span> Axel <span class="badge">KARLAVAGNEN</span></h2>
-      <div class="school-times"><div class="row"><span class="label">Börjar</span><span class="value" id="axelSchool">–</span></div><div class="row"><span class="label">Slutar</span><span class="value" id="axelEnd">–</span></div></div>
-      <div class="row lunch-row"><span class="label">Skollunch</span><span class="value lunch-value" id="axelAfter">Hämtar…</span></div>
-    </section>
-
-    <section class="card bus buscard">
+  <div class="day-switch" role="group" aria-label="Dag för skola, lunch och aktiviteter"><button data-day="0" aria-pressed="true">I dag</button><button data-day="1" aria-pressed="false">I morgon</button></div>
+<div class="grid main">
+    <section class="card school-card"><h2>Skola & lunch</h2><div class="school-date" id="schoolDate"></div><div class="children"><div class="child-block siri"><div class="child-line"><div class="child-name"><span class="avatar" aria-hidden="true">S</span>Siri</div><div class="child-time"><span class="label">Börjar</span><span class="value" id="siriSchool">–</span></div><div class="child-time"><span class="label">Slutar</span><span class="value" id="siriEnd">–</span></div></div><div class="child-lunch"><span class="label">Lunch</span><span id="siriAfter">Hämtar…</span></div></div><div class="child-block axel"><div class="child-line"><div class="child-name"><span class="avatar" aria-hidden="true">A</span>Axel</div><div class="child-time"><span class="label">Börjar</span><span class="value" id="axelSchool">–</span></div><div class="child-time"><span class="label">Slutar</span><span class="value" id="axelEnd">–</span></div></div><div class="child-lunch"><span class="label">Lunch</span><span id="axelAfter">Hämtar…</span></div></div></div></section>
+<section class="card bus buscard"><div class="live-label">Trafik just nu · påverkas inte av dagvalet</div>
       <h2><svg class="symbol" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="16" rx="3"/><path d="M5 11h14M8 19v2m8-2v2M8 15h1m6 0h1M9 6h6"/></svg> Nästa buss <span class="badge" id="busMode">PLANERAD</span></h2>
       <div class="label" id="busTitle">Laddar plan...</div>
       <div class="bigtime" id="busBig">–</div>
@@ -191,13 +186,13 @@ html{font-size:16px;color-scheme:light}body{font-family:-apple-system,BlinkMacSy
       <div class="status" id="trainStatus"></div>
     </section>
 
-    <section class="card"><h2><svg class="symbol" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 11h18M8 15h2m4 0h2"/></svg> I dag</h2><div id="agenda"></div></section>
+    <section class="card"><h2><svg class="symbol" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 11h18M8 15h2m4 0h2"/></svg> <span id="agendaHeading">I dag</span></h2><div id="agenda"></div></section>
     <section class="card"><h2><svg class="symbol" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 11h18M8 15h2m4 0h2"/></svg> Kommande 7 dagar</h2><div id="week"></div></section>
   </div>
 
   <div class="settings">
     <details>
-      <summary>Inställningar</summary>
+      <summary>Inställningar</summary><button class="view-button" id="kioskToggle" type="button" aria-pressed="false" title="Kompakt visning för bred iPad och väggskärm"><svg class="symbol" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 22h8m-4-4v4"/></svg><span>Skärmläge</span></button>
       <div class="warn">Anslut panelen med era befintliga uppgifter. Inställningarna sparas på den här enheten. Skärmläge ger en kompakt layout på breda skärmar; skärmens autolås styrs på enheten.</div>
 
       <div class="field">
@@ -234,7 +229,7 @@ html{font-size:16px;color-scheme:light}body{font-family:-apple-system,BlinkMacSy
     </details>
   </div>
 
-  <footer>Data från Trafiklab.se • Familjepanel v7</footer>
+  <footer>Data från Trafiklab.se • Familjepanel v8</footer>
 </div>
 
 <script>
@@ -723,6 +718,84 @@ async function loadSchoolLunch(){
     axelAfter.textContent='Kunde inte hämta menyn';
   }
 }
+
+let selectedDay=0, calendarEvents=[], calendarLoaded=false, calendarError='', lunchRequest=0;
+const lunchByDate=new Map();
+function selectedDate(){const d=localNow();d.setDate(d.getDate()+selectedDay);return d}
+function dateLabel(d){return new Intl.DateTimeFormat('sv-SE',{weekday:'long',day:'numeric',month:'long'}).format(d)}
+function eventOnDate(ev,key){const start=eventDateParts(ev.start).date;const end=eventDateParts(new Date(new Date(ev.end).getTime()-1).toISOString()).date;return start<=key&&end>=key}
+function renderStatic(){
+ const n=localNow(),d=selectedDate(),school=isSchoolDay(d),day=d.getDay();
+ today.textContent=dateLabel(n);greeting.textContent=n.getHours()<10?'God morgon':n.getHours()<17?'Hej!':'God kväll';
+ for(const [name,ends] of [['siri',schoolEndSiri],['axel',schoolEndAxel]]){document.getElementById(name+'School').textContent=school?'08.30':'Ledig';document.getElementById(name+'End').textContent=school?ends[day]:'–'}
+ document.getElementById('schoolDate').textContent=(selectedDay?'I morgon · ':'I dag · ')+dateLabel(d);
+ document.getElementById('agendaHeading').textContent=selectedDay?'I morgon':'I dag';
+ renderPlannedBus();renderNext();renderSelectedLunch();
+}
+function renderNext(){
+ const n=localNow(),evening=n.getHours()>=18,d=new Date(n);if(evening)d.setDate(d.getDate()+1);
+ const key=ymd(d),now=evening?-1:n.getHours()*60+n.getMinutes(),items=[];
+ const add=(hm,text)=>{const m=clockMinutes(hm.replace('.',':'));if(m>=now)items.push({m,text})};
+ if(isSchoolDay(d)){
+  add('07:54','Buss till skolan 07.54');add('08:30','Siri & Axel börjar 08.30');
+  add(schoolEndSiri[d.getDay()],'Siri slutar '+schoolEndSiri[d.getDay()]);add(schoolEndAxel[d.getDay()],'Axel slutar '+schoolEndAxel[d.getDay()]);
+  add('14:40',d.getDay()===2?'Siris buss till Kulturskolan 14.40':'Buss hem 14.40');
+ }
+ for(const ev of calendarEvents.filter(e=>!isRoutinePanelEvent(e)&&eventOnDate(e,key))){if(ev.allDay)items.push({m:now,text:(ev.title||'Aktivitet')+' · hela dagen'});else if(eventDateParts(ev.start).date===key)add(eventDateParts(ev.start).time,(ev.title||'Aktivitet')+' '+eventDateParts(ev.start).time.replace(':','.'))}
+ items.sort((a,b)=>a.m-b.m);
+ const prefix=evening?'I morgon: ':'';
+ document.getElementById('nextText').textContent=items.length?prefix+items.slice(0,2).map(x=>x.text).join(' · '):prefix+(calendarLoaded?(evening?'Inga tider planerade':'Inga fler tider planerade'):(evening?'Ingen skola planerad':'Inga fler skoltider planerade'));
+ document.getElementById('nextNote').textContent='Planerade tider'+(!calendarLoaded?' · '+(calendarError||'Kalendern är inte inläst'):'');
+}
+function renderSelectedLunch(){
+ const key=ymd(selectedDate()),school=isSchoolDay(selectedDate()),data=lunchByDate.get(key);
+ for(const name of ['siri','axel'])document.getElementById(name+'After').textContent=!school?'Ingen skollunch denna dag':data?.[name]?.meal|| (selectedDay?'Morgondagens meny är inte tillgänglig i panelen':'Meny saknas');
+}
+async function loadSchoolLunch(){
+ const d=selectedDate(),key=ymd(d),request=++lunchRequest;
+ if(!isSchoolDay(d)){renderSelectedLunch();return}
+ for(const name of ['siri','axel'])document.getElementById(name+'After').textContent='Hämtar menyn…';
+ try{
+  const data=await workerApi('/school-lunch'+(selectedDay?'?date='+encodeURIComponent(key):''));
+  // Older Workers ignore date. Never show today's meal as tomorrow's.
+  if(data.date===key)lunchByDate.set(key,data);
+  if(request===lunchRequest)renderSelectedLunch();
+ }catch(e){if(request===lunchRequest)for(const name of ['siri','axel'])document.getElementById(name+'After').textContent=selectedDay?'Morgondagens meny kunde inte hämtas':'Kunde inte hämta menyn'}
+}
+function calendarEventHtml(ev){
+ const meta=[calendarTimeLabel(ev),ev.location].filter(Boolean).join(' · '),color=/^#[0-9a-f]{3,8}$/i.test(ev.color||'')?ev.color:'#8e8e93';
+ return `<details class="event-detail"><summary class="calendar-event"><span class="calendar-dot" style="background:${color}"></span><span><span class="calendar-title">${escapeHtml(ev.title||'(utan titel)')}</span><span class="calendar-meta">${escapeHtml(meta)}</span></span><span class="detail-arrow" aria-hidden="true">⌄</span></summary><div class="event-body"><p>${escapeHtml(calendarTimeLabel(ev))}</p>${ev.description?`<p class="event-description">${escapeHtml(ev.description)}</p>`:'<p>Ingen ytterligare beskrivning.</p>'}${ev.location?`<p>${escapeHtml(ev.location)}</p><a class="map-link" href="https://maps.apple.com/?q=${encodeURIComponent(ev.location)}" target="_blank" rel="noopener noreferrer">Visa vägen ↗</a>`:''}<p class="calendar-meta">${escapeHtml(ev.source||'Kalender')}</p></div></details>`;
+}
+function renderCalendar(events){
+ calendarEvents=events;calendarLoaded=true;calendarError='';renderAgenda();renderNext();
+}
+function renderAgenda(){
+ const key=ymd(selectedDate()),filtered=calendarEvents.filter(e=>!isRoutinePanelEvent(e)).sort((a,b)=>new Date(a.start)-new Date(b.start));
+ if(!calendarLoaded){agenda.innerHTML=week.innerHTML='<div class="calendar-empty">'+escapeHtml(calendarError||'Hämtar kalender…')+'</div>';return}
+ const day=filtered.filter(e=>eventOnDate(e,key));agenda.innerHTML=day.length?day.map(calendarEventHtml).join(''):'<div class="calendar-empty">Inga kalenderhändelser '+(selectedDay?'i morgon':'i dag')+'.</div>';
+ const groups=new Map(),first=ymd(localNow()),last=endOfRollingWindowYmd();
+ for(const ev of filtered){const key=eventDateParts(ev.start).date;if(key>=first&&key<=last){if(!groups.has(key))groups.set(key,[]);groups.get(key).push(ev)}}
+ week.innerHTML=groups.size?[...groups].map(([key,items])=>`<div class="day-group"><div class="day-label">${escapeHtml(dateLabel(new Date(key+'T12:00:00')))}</div>${items.map(calendarEventHtml).join('')}</div>`).join(''):'<div class="calendar-empty">Inga kalenderhändelser de kommande 7 dagarna.</div>';
+}
+async function loadCalendar(){
+ if(!getSettings().panelToken){calendarLoaded=false;calendarError='Anslut kalendern under Inställningar.';renderAgenda();renderNext();return}
+ try{const data=await workerApi('/calendar?days=7');renderCalendar(Array.isArray(data.events)?data.events:[]);if(data.errors?.length){calendarError='En kalenderkälla kunde inte läsas';document.getElementById('nextNote').textContent+=' · '+calendarError;settingsStatus.textContent=calendarError}}
+ catch(e){calendarLoaded=false;calendarError='Kalendern kunde inte hämtas.';renderAgenda();renderNext()}
+}
+function renderTrainTrips(trips){
+ if(!trips.length)return '<div class="train-empty">Inga direkta tåg hittades.</div>';
+ return trips.slice(0,2).map(t=>{const x=tripInfo(t),leg=(t.LegList?.Leg||[]).find(l=>l.type==='JNY')||{},destination=leg.Destination?.name||'Se riktning ovan';
+ const status=x.cancelled?'Inställt':x.delay>0?`+${x.delay} min`:(leg.Origin?.rtTime?'I tid':'Tidtabell'),cls=x.cancelled?'cancelled':x.delay>0?'late':'ok';
+ return `<details class="train-detail"><summary class="trainrow"><span class="train-time">${escapeHtml(x.actualDep)}</span><span class="train-title">${escapeHtml(destination)}</span><span class="train-status ${cls}">${status} <span aria-hidden="true">⌄</span></span></summary><div class="train-expanded">${escapeHtml(x.name)} · Planerad avgång ${escapeHtml(x.plannedDep)}<br>Framme ${escapeHtml(x.actualArr)}${x.track?' · Spår '+escapeHtml(x.track):''}</div></details>`;
+ }).join('');
+}
+function renderWeather(data){
+ const c=data.current||{},h=data.hourly||{},key=currentStockholmHourKey();let start=(h.time||[]).findIndex(t=>t>=key);if(start<0)start=0;
+ const open=document.getElementById('weatherDetails')?.open||false;
+ const hours=[start,start+2,start+4,start+6].filter(i=>i<(h.time||[]).length).map(i=>`<div class="weather-hour"><div class="weather-hour-time">${h.time[i].slice(11,16)}</div><div class="weather-hour-icon">${weatherIcon(h.weather_code[i],1)}</div><div class="weather-hour-temp">${Math.round(h.temperature_2m[i])}°</div></div>`).join('');
+ weatherContent.innerHTML=`<details id="weatherDetails" ${open?'open':''}><summary><span class="weather-line"><span>${weatherIcon(c.weather_code,c.is_day)} <strong>${Math.round(c.temperature_2m)}°</strong> ${weatherText(c.weather_code)}</span><span class="weather-location">Strängnäs <span aria-hidden="true">⌄</span></span></span><span class="weather-advice">${escapeHtml(practicalWeatherAdvice(data,start))}</span><span class="sr-only">Tryck för timprognos</span></summary><div class="weather-meta">Känns ${Math.round(c.apparent_temperature)}° · Vind ${Math.round(c.wind_speed_10m)} m/s · Nederbörd ${Number(c.precipitation||0).toFixed(1)} mm</div><div class="weather-hours">${hours}</div></details>`;
+}
+document.querySelectorAll('[data-day]').forEach(button=>button.addEventListener('click',()=>{selectedDay=Number(button.dataset.day);document.querySelectorAll('[data-day]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));renderStatic();renderAgenda();loadSchoolLunch()}));
 
 saveSettings.onclick=()=>{
   localStorage.setItem('calendar_worker_url',calendarWorkerUrl.value.trim());
