@@ -110,7 +110,7 @@ footer{text-align:center;color:#8a93a3;font-size:11px;margin:20px 0 4px}
 
 .lunch-value{font-size:12px;line-height:1.25;max-width:62%;text-align:right}
 @media(max-width:560px){.lunch-value{max-width:64%;font-size:11px}}
-/* Familjepanel v8: presentation layer over the unchanged v6 data logic. */
+/* Familjepanel v9: presentation layer over the unchanged v6 data logic. */
 :root{--bg:#f2f2f7;--card:#fff;--ink:#1d1d1f;--muted:#626269;--line:#e5e5ea;--siri:#b52f60;--siriSoft:#fbeaf0;--axel:#1763ad;--axelSoft:#eaf2fc;--bus:#22764b;--busSoft:#eef6f0;--train:#6452a3;--trainSoft:#f3f1f8;--warnSoft:#fff4e5;--accent:#0066cc;--shadow:0 2px 4px #20203803,0 12px 28px #20203805}
 html{font-size:16px;color-scheme:light}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.45;-webkit-font-smoothing:antialiased}
 .app{max-width:1180px;padding: max(20px,env(safe-area-inset-top)) max(20px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(20px,env(safe-area-inset-left))}
@@ -134,6 +134,73 @@ html{font-size:16px;color-scheme:light}body{font-family:-apple-system,BlinkMacSy
 @media(min-width:680px){.children{display:grid;grid-template-columns:1fr 1fr;gap:24px}.child-block+.child-block{border-top:0;border-left:1px solid var(--line);padding:0 0 0 24px;margin:0}.hero{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}.hero-copy{grid-column:1}.next-panel{grid-column:1;margin:0}.weather-compact{grid-column:2;grid-row:1/3}.day-switch{max-width:360px}.school-card{grid-column:1/-1}}
 @media(min-width:960px){html.kiosk #weatherContent{display:block}html.kiosk .weather-hours{margin-top:10px;padding-top:10px}html.kiosk h1{font-size:.9375rem}}
 @media(max-width:360px){.child-line{gap:8px}.child-time .value{font-size:1.125rem}.trainrow{grid-template-columns:56px minmax(0,1fr) auto}.train-status{grid-column:auto}.weather-line{flex-wrap:wrap}.app{padding-left:12px;padding-right:12px}.card{padding:16px}}
+
+/* v9: mobile density + family personality */
+:root{
+  --siriGlow:color-mix(in srgb,var(--siri) 13%,transparent);
+  --axelGlow:color-mix(in srgb,var(--axel) 13%,transparent);
+  --busGlow:color-mix(in srgb,var(--bus) 10%,transparent);
+  --trainGlow:color-mix(in srgb,var(--train) 11%,transparent)
+}
+.next-panel{border-left:3px solid var(--accent)}
+.weather-compact{background:linear-gradient(145deg,color-mix(in srgb,var(--card) 92%,#5eb5ff 8%),var(--card))}
+.school-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+.school-heading h2{margin:0}.school-date{margin:2px 0 0}
+.school-card .day-switch{margin:0;flex:0 0 auto;padding:2px}
+.school-card .day-switch button{min-height:36px;padding:5px 11px;font-size:.8125rem}
+.child-block{padding:10px 12px;border:1px solid transparent;border-radius:14px}
+.child-block.siri{background:var(--siriGlow);border-color:color-mix(in srgb,var(--siri) 22%,transparent)}
+.child-block.axel{background:var(--axelGlow);border-color:color-mix(in srgb,var(--axel) 22%,transparent)}
+.child-block+.child-block{border-top-width:1px;padding-top:10px;margin-top:7px}
+.child-line{grid-template-columns:minmax(92px,1fr) auto;gap:8px}
+.child-name{font-size:1rem}.child-line .avatar{box-shadow:inset 0 0 0 1px #fff3}
+.school-range{font-size:1rem;font-weight:650;white-space:nowrap;font-variant-numeric:tabular-nums}
+.school-range .range-sep{padding:0 2px;color:var(--muted);font-weight:400}
+.school-range.is-off .range-sep,.school-range.is-off [id$="End"]{display:none}
+.child-lunch{margin:5px 0 0;font-size:.9375rem;line-height:1.35}
+.child-lunch .label{font-weight:650;color:var(--muted)}
+.school-card.is-off .children{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.school-card.is-off .child-block{margin:0;padding:9px 10px;border-width:1px}
+.school-card.is-off .child-lunch{display:none}
+.school-card.is-off .child-line{grid-template-columns:1fr;gap:5px}.school-card.is-off .school-range{padding-left:38px;color:var(--muted)}
+.buscard{border-top:2px solid color-mix(in srgb,var(--bus) 70%,transparent);background:linear-gradient(180deg,var(--busGlow),var(--card) 46%)}
+.traincard{border-top:2px solid color-mix(in srgb,var(--train) 70%,transparent);background:linear-gradient(180deg,var(--trainGlow),var(--card) 38%)}
+.buscard.is-empty .bigtime,.buscard.is-empty .note,.buscard.is-empty .bus-state,.buscard.is-empty #departures,.buscard.is-empty .toolbar,.buscard.is-empty #apiStatus{display:none}
+.buscard.is-empty #busTitle{margin:3px 0 0;color:var(--muted);font-size:.875rem}
+.buscard.is-empty h2{margin-bottom:0}.buscard.is-empty .live-label{display:none}
+.train-direction{padding:6px 9px;border-radius:12px;background:color-mix(in srgb,var(--train) 7%,transparent)}
+.train-direction h3{margin:0 0 2px;font-size:.75rem;font-weight:650;color:var(--train)}
+.train-grid{gap:7px}.trainrow{min-height:42px;padding:0;grid-template-columns:54px minmax(0,1fr) auto}
+.train-time{font-size:1.0625rem;font-weight:700}.train-title{font-size:.8125rem;color:var(--muted)}
+.train-status{font-size:.8125rem;font-weight:650}.train-expanded{padding:2px 0 9px 54px;line-height:1.4;font-size:.8125rem}
+.traincard.is-empty .train-grid{display:block}.traincard.is-empty .train-direction{display:none}.traincard.is-empty .train-direction:first-child{display:block;background:transparent;padding:0}
+.traincard.is-empty .train-direction:first-child h3{display:none}.traincard.is-empty #trainStatus{margin-top:2px}
+.agenda-card{border-top:2px solid color-mix(in srgb,#f3ad3d 65%,transparent)}
+.week-card{opacity:.94}.week-card h2{color:var(--muted)}
+.agenda-card.is-empty,.week-card.is-empty{padding-top:13px;padding-bottom:13px}.agenda-card.is-empty h2,.week-card.is-empty h2{margin-bottom:3px}
+.calendar-meta,.status,#nextNote,.live-label,.school-date{color:color-mix(in srgb,var(--muted) 86%,var(--ink) 14%)}
+.status-pill{display:inline-flex;align-items:center;border-radius:999px;padding:3px 7px;background:color-mix(in srgb,currentColor 10%,transparent)}
+
+@media(max-width:679px){
+  .app{padding:12px max(12px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-left))}
+  .hero{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding-bottom:0}.hero-copy{grid-column:1/-1}.hero h1{margin-bottom:1px}.hero .date{font-size:1.35rem}
+  .next-panel{margin:0;padding:9px 10px;border-radius:14px}.next-label{font-size:.75rem}#nextText{font-size:.875rem;line-height:1.35;margin-top:1px}#nextNote{font-size:.75rem}
+  .weather-compact{padding:8px 11px;border-radius:14px}.weather-compact summary{min-height:40px}.weather-line{font-size:.9375rem}.weather-line strong{font-size:1.125rem}.weather-advice{font-size:.8125rem;margin-top:1px}
+  .weather-location{display:none}
+  .grid{gap:9px}.card{padding:13px;border-radius:18px}.card h2{margin-bottom:7px}
+  .school-top{margin-bottom:7px}.school-card{padding:12px}.school-date{font-size:.75rem}
+  .traincard{padding:12px}.traincard h2{margin-bottom:5px}.train-grid{gap:6px}.train-direction{display:block}.train-direction>[id^="trainTo"]{display:grid;grid-template-columns:1fr 1fr;gap:0 7px}.trainrow{grid-template-columns:1fr auto;gap:3px;min-height:42px;padding:2px 0}.train-title{grid-column:1/-1;font-size:.75rem}.train-status{grid-column:2;grid-row:1}.train-expanded{padding:3px 0 8px;font-size:.75rem}.traincard>.status{display:none}.traincard.is-empty>.status{display:block}
+  .live-label{font-size:.75rem;margin-bottom:5px}
+}
+@media(max-width:350px){
+  .hero{display:block}.next-panel{margin:8px 0}.weather-compact{margin-bottom:0}
+  .school-top{align-items:flex-start}.school-card .day-switch button{padding:5px 8px}.school-date{max-width:130px}
+  .child-block{padding:9px}.child-name{font-size:.9375rem}.school-range{font-size:.9375rem}.child-lunch{font-size:.875rem}
+}
+@media(prefers-color-scheme:dark){
+  body{background:radial-gradient(circle at 20% -10%,#25213b 0,transparent 34%),var(--bg)}
+  .weather-compact{background:linear-gradient(145deg,#242b35,var(--card))}
+}
 </style>
 </head>
 <body>
@@ -154,9 +221,8 @@ html{font-size:16px;color-scheme:light}body{font-family:-apple-system,BlinkMacSy
     </aside>
   </header>
 
-  <div class="day-switch" role="group" aria-label="Dag för skola, lunch och aktiviteter"><button data-day="0" aria-pressed="true">I dag</button><button data-day="1" aria-pressed="false">I morgon</button></div>
-<div class="grid main">
-    <section class="card school-card"><h2>Skola & lunch</h2><div class="school-date" id="schoolDate"></div><div class="children"><div class="child-block siri"><div class="child-line"><div class="child-name"><span class="avatar" aria-hidden="true">S</span>Siri</div><div class="child-time"><span class="label">Börjar</span><span class="value" id="siriSchool">–</span></div><div class="child-time"><span class="label">Slutar</span><span class="value" id="siriEnd">–</span></div></div><div class="child-lunch"><span class="label">Lunch</span><span id="siriAfter">Hämtar…</span></div></div><div class="child-block axel"><div class="child-line"><div class="child-name"><span class="avatar" aria-hidden="true">A</span>Axel</div><div class="child-time"><span class="label">Börjar</span><span class="value" id="axelSchool">–</span></div><div class="child-time"><span class="label">Slutar</span><span class="value" id="axelEnd">–</span></div></div><div class="child-lunch"><span class="label">Lunch</span><span id="axelAfter">Hämtar…</span></div></div></div></section>
+  <div class="grid main">
+    <section class="card school-card"><div class="school-top"><div class="school-heading"><h2>Skola & lunch</h2><div class="school-date" id="schoolDate"></div></div><div class="day-switch" role="group" aria-label="Dag för skola, lunch och aktiviteter"><button data-day="0" aria-pressed="true">I dag</button><button data-day="1" aria-pressed="false">I morgon</button></div></div><div class="children"><div class="child-block siri"><div class="child-line"><div class="child-name"><span class="avatar" aria-hidden="true">S</span>Siri</div><div class="school-range"><span id="siriSchool">–</span><span class="range-sep">–</span><span id="siriEnd">–</span></div></div><div class="child-lunch"><span class="label">Lunch</span><span id="siriAfter">Hämtar…</span></div></div><div class="child-block axel"><div class="child-line"><div class="child-name"><span class="avatar" aria-hidden="true">A</span>Axel</div><div class="school-range"><span id="axelSchool">–</span><span class="range-sep">–</span><span id="axelEnd">–</span></div></div><div class="child-lunch"><span class="label">Lunch</span><span id="axelAfter">Hämtar…</span></div></div></div></section>
 <section class="card bus buscard"><div class="live-label">Trafik just nu · påverkas inte av dagvalet</div>
       <h2><svg class="symbol" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="16" rx="3"/><path d="M5 11h14M8 19v2m8-2v2M8 15h1m6 0h1M9 6h6"/></svg> Nästa buss <span class="badge" id="busMode">PLANERAD</span></h2>
       <div class="label" id="busTitle">Laddar plan...</div>
@@ -186,8 +252,8 @@ html{font-size:16px;color-scheme:light}body{font-family:-apple-system,BlinkMacSy
       <div class="status" id="trainStatus"></div>
     </section>
 
-    <section class="card"><h2><svg class="symbol" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 11h18M8 15h2m4 0h2"/></svg> <span id="agendaHeading">I dag</span></h2><div id="agenda"></div></section>
-    <section class="card"><h2><svg class="symbol" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 11h18M8 15h2m4 0h2"/></svg> Kommande 7 dagar</h2><div id="week"></div></section>
+    <section class="card agenda-card"><h2><svg class="symbol" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 11h18M8 15h2m4 0h2"/></svg> <span id="agendaHeading">I dag</span></h2><div id="agenda"></div></section>
+    <section class="card week-card"><h2><svg class="symbol" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 11h18M8 15h2m4 0h2"/></svg> Kommande 7 dagar</h2><div id="week"></div></section>
   </div>
 
   <div class="settings">
@@ -229,7 +295,7 @@ html{font-size:16px;color-scheme:light}body{font-family:-apple-system,BlinkMacSy
     </details>
   </div>
 
-  <footer>Data från Trafiklab.se • Familjepanel v8</footer>
+  <footer>Data från Trafiklab.se • Familjepanel v9</footer>
 </div>
 
 <script>
@@ -796,6 +862,61 @@ function renderWeather(data){
  weatherContent.innerHTML=`<details id="weatherDetails" ${open?'open':''}><summary><span class="weather-line"><span>${weatherIcon(c.weather_code,c.is_day)} <strong>${Math.round(c.temperature_2m)}°</strong> ${weatherText(c.weather_code)}</span><span class="weather-location">Strängnäs <span aria-hidden="true">⌄</span></span></span><span class="weather-advice">${escapeHtml(practicalWeatherAdvice(data,start))}</span><span class="sr-only">Tryck för timprognos</span></summary><div class="weather-meta">Känns ${Math.round(c.apparent_temperature)}° · Vind ${Math.round(c.wind_speed_10m)} m/s · Nederbörd ${Number(c.precipitation||0).toFixed(1)} mm</div><div class="weather-hours">${hours}</div></details>`;
 }
 document.querySelectorAll('[data-day]').forEach(button=>button.addEventListener('click',()=>{selectedDay=Number(button.dataset.day);document.querySelectorAll('[data-day]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));renderStatic();renderAgenda();loadSchoolLunch()}));
+
+
+function renderStatic(){
+ const n=localNow(),d=selectedDate(),school=isSchoolDay(d),day=d.getDay(),card=document.querySelector('.school-card');
+ today.textContent=dateLabel(n);greeting.textContent=n.getHours()<10?'God morgon':n.getHours()<17?'Hej!':'God kväll';
+ for(const [name,ends] of [['siri',schoolEndSiri],['axel',schoolEndAxel]]){
+  document.getElementById(name+'School').textContent=school?'08.30':'Ledig';
+  document.getElementById(name+'End').textContent=school?ends[day]:'–';
+  document.querySelector('.'+name+' .school-range')?.classList.toggle('is-off',!school);
+ }
+ card?.classList.toggle('is-off',!school);
+ document.getElementById('schoolDate').textContent=(selectedDay?'I morgon · ':'I dag · ')+dateLabel(d);
+ document.getElementById('agendaHeading').textContent=selectedDay?'I morgon':'I dag';
+ renderPlannedBus();renderNext();renderSelectedLunch();
+}
+
+function offsetPanelDate(date,days){const copy=new Date(date);copy.setDate(copy.getDate()+days);return copy}
+
+function renderNext(){
+ const n=localNow(),evening=n.getHours()>=18,d=new Date(n);if(evening)d.setDate(d.getDate()+1);
+ const key=ymd(d),now=evening?-1:n.getHours()*60+n.getMinutes(),items=[];
+ const add=(hm,text)=>{const m=clockMinutes(hm.replace('.',':'));if(m>=now)items.push({m,text})};
+ if(isSchoolDay(d)){
+  add('07:54','Buss till skolan 07.54');add('08:30','Siri & Axel börjar 08.30');
+  add(schoolEndSiri[d.getDay()],'Siri slutar '+schoolEndSiri[d.getDay()]);add(schoolEndAxel[d.getDay()],'Axel slutar '+schoolEndAxel[d.getDay()]);
+  add('14:40',d.getDay()===2?'Siris buss till Kulturskolan 14.40':'Buss hem 14.40');
+ }
+ for(const ev of calendarEvents.filter(e=>!isRoutinePanelEvent(e)&&eventOnDate(e,key))){if(ev.allDay)items.push({m:now,text:(ev.title||'Aktivitet')+' · hela dagen'});else if(eventDateParts(ev.start).date===key)add(eventDateParts(ev.start).time,(ev.title||'Aktivitet')+' '+eventDateParts(ev.start).time.replace(':','.'))}
+ items.sort((a,b)=>a.m-b.m);const prefix=evening?'I morgon: ':'';
+ document.getElementById('nextText').textContent=items.length?prefix+items.slice(0,2).map(x=>x.text).join(' · '):prefix+(calendarLoaded?(evening?'Inga tider planerade':'Inga fler tider planerade'):(evening?'Ingen skola planerad':'Inga fler skoltider planerade'));
+ const note=document.getElementById('nextNote');note.textContent=calendarError||'';note.hidden=!calendarError;
+}
+
+function renderAgenda(){
+ const key=ymd(selectedDate()),filtered=calendarEvents.filter(e=>!isRoutinePanelEvent(e)).sort((a,b)=>new Date(a.start)-new Date(b.start));
+ const agendaCard=document.querySelector('.agenda-card'),weekCard=document.querySelector('.week-card');
+ if(!calendarLoaded){const message=escapeHtml(calendarError||'Hämtar kalender…');agenda.innerHTML=week.innerHTML='<div class="calendar-empty">'+message+'</div>';agendaCard?.classList.add('is-empty');weekCard?.classList.add('is-empty');return}
+ const day=filtered.filter(e=>eventOnDate(e,key));agenda.innerHTML=day.length?day.map(calendarEventHtml).join(''):'<div class="calendar-empty">Inga aktiviteter '+(selectedDay?'i morgon':'i dag')+'.</div>';agendaCard?.classList.toggle('is-empty',!day.length);
+ const groups=new Map(),first=ymd(offsetPanelDate(localNow(),1)),last=ymd(offsetPanelDate(localNow(),7));
+ for(const ev of filtered){const eventKey=eventDateParts(ev.start).date;if(eventKey>=first&&eventKey<=last){if(!groups.has(eventKey))groups.set(eventKey,[]);groups.get(eventKey).push(ev)}}
+ week.innerHTML=groups.size?[...groups].map(([groupKey,items])=>`<div class="day-group"><div class="day-label">${escapeHtml(dateLabel(new Date(groupKey+'T12:00:00')))}</div>${items.map(calendarEventHtml).join('')}</div>`).join(''):'<div class="calendar-empty">Inga aktiviteter de kommande 7 dagarna.</div>';weekCard?.classList.toggle('is-empty',!groups.size);
+}
+
+function renderTrainTrips(trips){
+ if(!trips.length)return '<div class="train-empty">Inga direkta tåg hittades.</div>';
+ return trips.slice(0,2).map(t=>{const x=tripInfo(t),leg=(t.LegList?.Leg||[]).find(l=>l.type==='JNY')||{},name=x.name||'Tåg';
+  const status=x.cancelled?'Inställt':x.delay>0?`+${x.delay} min`:(leg.Origin?.rtTime?'I tid':'Tidtabell'),cls=x.cancelled?'cancelled':x.delay>0?'late':'ok';
+  return `<details class="train-detail"><summary class="trainrow"><span class="train-time">${escapeHtml(x.actualDep)}</span><span class="train-title">${escapeHtml(name)}</span><span class="train-status ${cls}">${status} <span aria-hidden="true">⌄</span></span></summary><div class="train-expanded">Planerad ${escapeHtml(x.plannedDep)} · Framme ${escapeHtml(x.actualArr)}${x.track?' · Spår '+escapeHtml(x.track):''}</div></details>`;
+ }).join('');
+}
+
+const renderPlannedBusBeforeV9=renderPlannedBus;
+renderPlannedBus=function(){renderPlannedBusBeforeV9();const empty=String(busTitle.textContent).startsWith('Ingen skolbuss');document.querySelector('.buscard')?.classList.toggle('is-empty',empty);if(empty)busTitle.textContent='Ingen aktuell skolbuss';};
+const loadTrainsBeforeV9=loadTrains;
+loadTrains=async function(){await loadTrainsBeforeV9();const empty=Boolean(document.querySelector('#trainToStockholm .train-empty')&&document.querySelector('#trainToStrangnas .train-empty'));document.querySelector('.traincard')?.classList.toggle('is-empty',empty);};
 
 saveSettings.onclick=()=>{
   localStorage.setItem('calendar_worker_url',calendarWorkerUrl.value.trim());
