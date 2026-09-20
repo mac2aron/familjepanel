@@ -110,7 +110,7 @@ footer{text-align:center;color:#8a93a3;font-size:11px;margin:20px 0 4px}
 
 .lunch-value{font-size:12px;line-height:1.25;max-width:62%;text-align:right}
 @media(max-width:560px){.lunch-value{max-width:64%;font-size:11px}}
-/* Familjepanel v9: presentation layer over the unchanged v6 data logic. */
+/* Familjepanel v10: presentation layer over the unchanged v6 data logic. */
 :root{--bg:#f2f2f7;--card:#fff;--ink:#1d1d1f;--muted:#626269;--line:#e5e5ea;--siri:#b52f60;--siriSoft:#fbeaf0;--axel:#1763ad;--axelSoft:#eaf2fc;--bus:#22764b;--busSoft:#eef6f0;--train:#6452a3;--trainSoft:#f3f1f8;--warnSoft:#fff4e5;--accent:#0066cc;--shadow:0 2px 4px #20203803,0 12px 28px #20203805}
 html{font-size:16px;color-scheme:light}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.45;-webkit-font-smoothing:antialiased}
 .app{max-width:1180px;padding: max(20px,env(safe-area-inset-top)) max(20px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(20px,env(safe-area-inset-left))}
@@ -202,7 +202,30 @@ html{font-size:16px;color-scheme:light}body{font-family:-apple-system,BlinkMacSy
   .weather-compact{background:linear-gradient(145deg,#242b35,var(--card))}
 }
 </style>
-</head>
+<style>.schema-open{position:relative;background:transparent;color:var(--accent);padding:0 2px;margin-left:auto;min-height:30px;font-size:.75rem;font-weight:600;white-space:nowrap;border:0;box-shadow:none}
+.schema-open::after{content:'';position:absolute;inset:-7px -2px}
+.siri .schema-open{color:var(--siri)}.axel .schema-open{color:var(--axel)}
+.child-name{min-width:0;gap:6px}.child-line{grid-template-columns:minmax(0,1fr) auto}
+.schema-open:focus-visible,#schemaDialog button:focus-visible,#schemaDialog summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#schemaDialog{--person:var(--siri);padding:0;border:1px solid var(--line);border-bottom:0;border-radius:26px 26px 0 0;background:var(--card);color:var(--ink);width:min(100%,600px);max-width:100%;height:min(90vh,850px);height:min(90dvh,850px);max-height:calc(100dvh - env(safe-area-inset-top) - 12px);margin:auto auto 0;overflow:hidden;box-shadow:0 -16px 80px #0004}
+#schemaDialog::backdrop{background:#0008;backdrop-filter:blur(5px)}
+#schemaDialog[open]{animation:schema-appear .2s ease-out}.schema-shell{height:100%;display:flex;flex-direction:column}
+.schema-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:22px 20px 12px;flex-shrink:0}
+.schema-header h2{font-size:1.35rem;margin:0;color:var(--person)}.schema-header p{margin:4px 0 0;color:var(--muted);font-size:.8125rem}
+#schemaClose{width:44px;height:44px;min-height:44px;flex-shrink:0;padding:0;border-radius:50%;background:var(--line);color:var(--ink);font-size:1.8rem;line-height:1}
+.schema-tabs{display:flex;gap:3px;background:var(--line);padding:3px;margin:0 20px 12px;border-radius:13px;flex-shrink:0}
+.schema-tabs button{flex:1;min-height:44px;background:transparent;color:var(--muted);padding:8px;border:0;border-radius:10px}
+.schema-tabs button[aria-pressed=true]{background:var(--card);color:var(--ink);box-shadow:0 2px 5px #0002}
+.schema-body{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:0 20px max(24px,env(safe-area-inset-bottom));flex:1;min-height:0}
+.schema-date{font-size:.875rem;color:var(--muted);margin:2px 0 12px}.schema-list{list-style:none;margin:0;padding:0}
+.schema-lesson{display:grid;grid-template-columns:86px minmax(0,1fr);gap:10px;padding:10px 10px 10px 12px;margin-bottom:6px;border-radius:10px;border-left:3px solid var(--subject);background:color-mix(in srgb,var(--subject) 9%,var(--card));align-items:baseline}
+.schema-lesson time{font-size:.8125rem;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--muted)}.schema-lesson strong{font-size:.9375rem;font-weight:550;line-height:1.35;overflow-wrap:anywhere}
+.schema-day{border:1px solid var(--line);border-radius:14px;margin:8px 0;overflow:hidden}.schema-day summary{list-style:none;display:flex;justify-content:space-between;align-items:center;min-height:52px;padding:12px;font-weight:600;cursor:pointer}.schema-day summary::after{content:'+';color:var(--person);font-size:1.3rem}.schema-day[open] summary::after{content:'−'}.schema-day .schema-list{padding:0 8px 4px}
+.schema-note{font-size:.8125rem;color:var(--muted);line-height:1.5;margin:12px 2px}.schema-empty{text-align:center;padding:28px 4px 24px}.schema-empty h3{font-size:1.15rem;margin:0 0 8px}.schema-empty p{color:var(--muted);font-size:.9375rem;line-height:1.5}.schema-empty button{margin-top:8px;min-height:44px}
+@keyframes schema-appear{from{transform:translateY(35px);opacity:0}to{transform:translateY(0);opacity:1}}
+@media(prefers-reduced-motion:reduce){#schemaDialog[open]{animation:none}}
+@media(max-width:360px){.child-name{gap:4px}.child-line .avatar{width:26px;height:26px}.schema-open{font-size:.6875rem}.schema-header{padding:18px 14px 12px}.schema-tabs{margin-left:14px;margin-right:14px}.schema-body{padding-left:14px;padding-right:14px}}
+</style></head>
 <body>
 <div class="app">
   <header class="hero">
@@ -222,7 +245,7 @@ html{font-size:16px;color-scheme:light}body{font-family:-apple-system,BlinkMacSy
   </header>
 
   <div class="grid main">
-    <section class="card school-card"><div class="school-top"><div class="school-heading"><h2>Skola & lunch</h2><div class="school-date" id="schoolDate"></div></div><div class="day-switch" role="group" aria-label="Dag för skola, lunch och aktiviteter"><button data-day="0" aria-pressed="true">I dag</button><button data-day="1" aria-pressed="false">I morgon</button></div></div><div class="children"><div class="child-block siri"><div class="child-line"><div class="child-name"><span class="avatar" aria-hidden="true">S</span>Siri</div><div class="school-range"><span id="siriSchool">–</span><span class="range-sep">–</span><span id="siriEnd">–</span></div></div><div class="child-lunch"><span class="label">Lunch</span><span id="siriAfter">Hämtar…</span></div></div><div class="child-block axel"><div class="child-line"><div class="child-name"><span class="avatar" aria-hidden="true">A</span>Axel</div><div class="school-range"><span id="axelSchool">–</span><span class="range-sep">–</span><span id="axelEnd">–</span></div></div><div class="child-lunch"><span class="label">Lunch</span><span id="axelAfter">Hämtar…</span></div></div></div></section>
+    <section class="card school-card"><div class="school-top"><div class="school-heading"><h2>Skola & lunch</h2><div class="school-date" id="schoolDate"></div></div><div class="day-switch" role="group" aria-label="Dag för skola, lunch och aktiviteter"><button data-day="0" aria-pressed="true">I dag</button><button data-day="1" aria-pressed="false">I morgon</button></div></div><div class="children"><div class="child-block siri"><div class="child-line"><div class="child-name"><span class="avatar" aria-hidden="true">S</span>Siri<button type="button" class="schema-open" data-child="siri" aria-label="Visa schema för Siri" aria-haspopup="dialog">Schema <span aria-hidden="true">›</span></button></div><div class="school-range"><span id="siriSchool">–</span><span class="range-sep">–</span><span id="siriEnd">–</span></div></div><div class="child-lunch"><span class="label">Lunch</span><span id="siriAfter">Hämtar…</span></div></div><div class="child-block axel"><div class="child-line"><div class="child-name"><span class="avatar" aria-hidden="true">A</span>Axel<button type="button" class="schema-open" data-child="axel" aria-label="Visa schema för Axel" aria-haspopup="dialog">Schema <span aria-hidden="true">›</span></button></div><div class="school-range"><span id="axelSchool">–</span><span class="range-sep">–</span><span id="axelEnd">–</span></div></div><div class="child-lunch"><span class="label">Lunch</span><span id="axelAfter">Hämtar…</span></div></div></div></section>
 <section class="card bus buscard"><div class="live-label">Trafik just nu · påverkas inte av dagvalet</div>
       <h2><svg class="symbol" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="3" width="14" height="16" rx="3"/><path d="M5 11h14M8 19v2m8-2v2M8 15h1m6 0h1M9 6h6"/></svg> Nästa buss <span class="badge" id="busMode">PLANERAD</span></h2>
       <div class="label" id="busTitle">Laddar plan...</div>
@@ -295,7 +318,7 @@ html{font-size:16px;color-scheme:light}body{font-family:-apple-system,BlinkMacSy
     </details>
   </div>
 
-  <footer>Data från Trafiklab.se • Familjepanel v9</footer>
+  <footer>Data från Trafiklab.se • Familjepanel v10</footer>
 </div>
 
 <script>
@@ -953,5 +976,39 @@ function setKiosk(enabled){document.documentElement.classList.toggle('kiosk',ena
 try{setKiosk(localStorage.getItem('familjepanel_kiosk')==='1')}catch{}
 kioskButton.addEventListener('click',()=>{const enabled=!document.documentElement.classList.contains('kiosk');setKiosk(enabled);try{localStorage.setItem('familjepanel_kiosk',enabled?'1':'0')}catch{}});
 </script>
-</body>
+<dialog id="schemaDialog" aria-labelledby="schemaTitle"><div class="schema-shell"><header class="schema-header"><div><h2 id="schemaTitle"></h2><p id="schemaSchool"></p></div><button type="button" id="schemaClose" aria-label="Stäng schema">×</button></header><div class="schema-tabs" role="group" aria-label="Schemavy"><button type="button" data-view="today" aria-pressed="true">I dag</button><button type="button" data-view="week" aria-pressed="false">Vecka</button></div><div id="schemaBody" class="schema-body"></div></div></dialog><script>const subjectSchedules={"siri":[[{"color":"portfolio","start":510,"end":540,"title":"Portfolio"},{"color":"so","start":545,"end":595,"title":"SO"},{"color":"sv","start":610,"end":675,"title":"Svenska"},{"color":"lunch","start":675,"end":695,"title":"Lunch"},{"color":"ma","start":720,"end":780,"title":"Matematik"},{"color":"eng","start":785,"end":840,"title":"Engelska"}],[{"color":"sv","start":510,"end":555,"title":"Svenska"},{"color":"so","start":570,"end":640,"title":"SO"},{"color":"lunch","start":645,"end":665,"title":"Lunch"},{"color":"no","start":690,"end":750,"title":"NO"},{"color":"sv","start":765,"end":850,"title":"Svenska"},{"color":"animation","start":930,"end":990,"title":"Animation"}],[{"color":"ma","start":510,"end":565,"title":"Matematik"},{"color":"eng","start":580,"end":640,"title":"Engelska"},{"color":"lunch","start":640,"end":660,"title":"Lunch"},{"color":"so","start":685,"end":775,"title":"SO"},{"color":"no","start":790,"end":840,"title":"NO"}],[{"color":"musik","start":510,"end":555,"title":"Musik"},{"color":"no","start":560,"end":600,"title":"NO"},{"color":"slojd","start":615,"end":690,"title":"Slöjd"},{"color":"lunch","start":690,"end":710,"title":"Lunch"},{"color":"ma","start":730,"end":775,"title":"Matematik"},{"color":"sv","start":780,"end":840,"title":"Svenska"}],[{"color":"sv","start":510,"end":570,"title":"Svenska"},{"color":"ma","start":585,"end":625,"title":"Matematik"},{"color":"future","start":630,"end":670,"title":"Future me"},{"color":"lunch","start":670,"end":690,"title":"Lunch"},{"color":"idrott","start":710,"end":790,"title":"Idrott"},{"color":"bild","start":820,"end":860,"title":"Bild"}]],"axel":[[{"color":"ma","start":510,"end":550,"title":"Matematik"},{"color":"sv","start":550,"end":580,"title":"Svenska"},{"color":"sv","start":600,"end":610,"title":"Svenska"},{"color":"teknik","start":610,"end":640,"title":"Teknik"},{"color":"no","start":640,"end":680,"title":"NO"},{"color":"mix-idrott-sv","start":740,"end":810,"title":"Idrott och hälsa / Svenska"}],[{"color":"sv","start":510,"end":520,"title":"Svenska"},{"color":"mix-ma-musik","start":520,"end":565,"title":"Matematik / Musik"},{"color":"mix-ma-musik","start":590,"end":635,"title":"Matematik / Musik"},{"color":"eng","start":635,"end":680,"title":"Engelska"},{"color":"mix-idrott-sv","start":740,"end":810,"title":"Idrott och hälsa / Svenska"}],[{"color":"sv","start":510,"end":520,"title":"Svenska"},{"color":"samlad","start":520,"end":550,"title":"Samlad skoldag"},{"color":"samlad","start":550,"end":580,"title":"Samlad skoldag"},{"color":"ma","start":600,"end":650,"title":"Matematik"},{"color":"sv","start":650,"end":680,"title":"Svenska"},{"color":"so","start":740,"end":790,"title":"SO"},{"color":"sv","start":790,"end":840,"title":"Svenska"}],[{"color":"ma","start":510,"end":545,"title":"Matematik"},{"color":"sv","start":545,"end":580,"title":"Svenska"},{"color":"so","start":640,"end":680,"title":"SO"},{"color":"no","start":740,"end":790,"title":"NO"},{"color":"bild","start":790,"end":840,"title":"Bild"}],[{"color":"mix-idrott-ma","start":510,"end":650,"title":"Idrott och hälsa / Matematik"},{"color":"sv","start":650,"end":680,"title":"Svenska"},{"color":"so","start":740,"end":770,"title":"SO"},{"color":"sv","start":770,"end":810,"title":"Svenska"}]]};
+(()=>{
+ const dialog=document.getElementById('schemaDialog'),body=document.getElementById('schemaBody');
+ const days=['Måndag','Tisdag','Onsdag','Torsdag','Fredag'];
+ const colors={sv:'#83baff',ma:'#8bce97',eng:'#e6c36d',so:'#ed9b91',no:'#87c89b',musik:'#c2a1ed',idrott:'#a9a7ed',lunch:'#a3aab5',portfolio:'#eaa0bc',slojd:'#d7a1d2',future:'#eaa0bc',bild:'#c2a1ed',teknik:'#81bdc7',samlad:'#a7b8cf',animation:'#eba2ce','mix-ma-musik':'#b5b6ce','mix-idrott-sv':'#9cb3ed','mix-idrott-ma':'#a8c4b7'};
+ let child='siri',view='today',opener=null,scrollY=0,oldStyle=null;
+ const time=n=>`${String(Math.floor(n/60)).padStart(2,'0')}.${String(n%60).padStart(2,'0')}`;
+ function lessons(index){const ul=document.createElement('ul');ul.className='schema-list';
+  for(const item of subjectSchedules[child][index]){const li=document.createElement('li');li.className='schema-lesson';li.style.setProperty('--subject',colors[item.color]);const t=document.createElement('time');t.textContent=time(item.start)+'–'+time(item.end);const title=document.createElement('strong');title.textContent=item.title;li.append(t,title);ul.append(li)}return ul;
+ }
+ function note(text){const p=document.createElement('p');p.className='schema-note';p.textContent=text;return p}
+ function render(){const now=localNow(),index=now.getDay()-1;body.replaceChildren();
+  dialog.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===view)));
+  if(view==='today'){
+   const date=document.createElement('p');date.className='schema-date';date.textContent=new Intl.DateTimeFormat('sv-SE',{weekday:'long',day:'numeric',month:'long'}).format(now);body.append(date);
+   if(isSchoolDay(now)){body.append(lessons(index));if(child==='siri'&&(index===1||index===2))body.append(note(index===1?'Läxhjälp 14.15–15.15. Tisdag krockar med resan till Animation. Animation 15.30–16.30 · Kulturskolan.':'Läxhjälp 14.20–15.20.'))}
+   else{const empty=document.createElement('div');empty.className='schema-empty';empty.innerHTML='<h3>Ingen skola idag</h3><p>Ledig dag. Veckoschemat finns här när du vill kika framåt.</p><button type="button">Visa veckoschema</button>';empty.querySelector('button').onclick=()=>{view='week';render();dialog.querySelector('[data-view="week"]').focus()};body.append(empty)}
+  }else{body.append(note('Ordinarie veckoschema · öppna en dag för att se alla pass.'));
+   days.forEach((day,i)=>{const detail=document.createElement('details');detail.className='schema-day';detail.open=i===(index>=0&&index<5?index:0);const summary=document.createElement('summary');summary.textContent=day;detail.append(summary,lessons(i));if(child==='siri'&&(i===1||i===2))detail.append(note(i===1?'Läxhjälp 14.15–15.15 (krockar med resan till Animation). Animation · Kulturskolan.':'Läxhjälp 14.20–15.20.'));body.append(detail)});
+  }
+  body.append(note('Tider och ämnen enligt originalschemat. Lov och lediga dagar följer Familjepanelens kalender.'));body.scrollTop=0;
+ }
+ document.querySelectorAll('.schema-open').forEach(button=>button.addEventListener('click',()=>{
+  opener=button;child=button.dataset.child;view='today';document.getElementById('schemaTitle').textContent=(child==='siri'?'Siris':'Axels')+' schema';document.getElementById('schemaSchool').textContent=child==='siri'?'Friskolan Asken · Klass 4B':'Karlavagnen';dialog.style.setProperty('--person',`var(--${child})`);render();
+  scrollY=window.scrollY;oldStyle=document.body.getAttribute('style');Object.assign(document.body.style,{position:'fixed',top:`-${scrollY}px`,width:'100%',overflow:'hidden'});dialog.showModal();document.getElementById('schemaClose').focus();
+ }));
+ dialog.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>{view=b.dataset.view;render()}));
+ document.getElementById('schemaClose').onclick=()=>dialog.close();
+ let outside=false;const isOutside=e=>{const r=dialog.getBoundingClientRect();return e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom};
+ dialog.addEventListener('pointerdown',e=>{outside=isOutside(e)});dialog.addEventListener('click',e=>{if(outside&&isOutside(e))dialog.close();outside=false});
+ dialog.addEventListener('close',()=>{if(oldStyle===null)document.body.removeAttribute('style');else document.body.setAttribute('style',oldStyle);window.scrollTo(0,scrollY);opener?.focus({preventScroll:true})});
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden&&dialog.open)render()});
+ let dateKey='';setInterval(()=>{if(dialog.open){const key=ymd(localNow());if(key!==dateKey){dateKey=key;render()}}},60000);
+})();
+</script></body>
 </html>
