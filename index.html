@@ -110,7 +110,7 @@ footer{text-align:center;color:#8a93a3;font-size:11px;margin:20px 0 4px}
 
 .lunch-value{font-size:12px;line-height:1.25;max-width:62%;text-align:right}
 @media(max-width:560px){.lunch-value{max-width:64%;font-size:11px}}
-/* Familjepanel v10: presentation layer over the unchanged v6 data logic. */
+/* Familjepanel v11: presentation layer over the unchanged v6 data logic. */
 :root{--bg:#f2f2f7;--card:#fff;--ink:#1d1d1f;--muted:#626269;--line:#e5e5ea;--siri:#b52f60;--siriSoft:#fbeaf0;--axel:#1763ad;--axelSoft:#eaf2fc;--bus:#22764b;--busSoft:#eef6f0;--train:#6452a3;--trainSoft:#f3f1f8;--warnSoft:#fff4e5;--accent:#0066cc;--shadow:0 2px 4px #20203803,0 12px 28px #20203805}
 html{font-size:16px;color-scheme:light}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.45;-webkit-font-smoothing:antialiased}
 .app{max-width:1180px;padding: max(20px,env(safe-area-inset-top)) max(20px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(20px,env(safe-area-inset-left))}
@@ -162,6 +162,8 @@ html{font-size:16px;color-scheme:light}body{font-family:-apple-system,BlinkMacSy
 .school-card.is-off .children{display:grid;grid-template-columns:1fr 1fr;gap:7px}
 .school-card.is-off .child-block{margin:0;padding:9px 10px;border-width:1px}
 .school-card.is-off .child-lunch{display:none}
+.school-card.is-off .siri.has-menu .child-lunch{display:block}
+.school-card.is-off .siri.has-menu .child-lunch .label{display:none}
 .school-card.is-off .child-line{grid-template-columns:1fr;gap:5px}.school-card.is-off .school-range{padding-left:38px;color:var(--muted)}
 .buscard{border-top:2px solid color-mix(in srgb,var(--bus) 70%,transparent);background:linear-gradient(180deg,var(--busGlow),var(--card) 46%)}
 .traincard{border-top:2px solid color-mix(in srgb,var(--train) 70%,transparent);background:linear-gradient(180deg,var(--trainGlow),var(--card) 38%)}
@@ -201,6 +203,22 @@ html{font-size:16px;color-scheme:light}body{font-family:-apple-system,BlinkMacSy
   body{background:radial-gradient(circle at 20% -10%,#25213b 0,transparent 34%),var(--bg)}
   .weather-compact{background:linear-gradient(145deg,#242b35,var(--card))}
 }
+</style>
+
+<style>
+.menu-open{position:relative;background:transparent;color:var(--siri);padding:0;border:0;min-height:28px;font:inherit;font-weight:600;cursor:pointer}
+.menu-open::after{content:'';position:absolute;inset:-7px -4px}
+.menu-open:focus-visible,#menuDialog button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+#menuDialog{padding:0;border:1px solid var(--line);border-bottom:0;border-radius:26px 26px 0 0;background:var(--card);color:var(--ink);width:min(100%,620px);max-width:100%;height:min(92dvh,900px);max-height:calc(100dvh - env(safe-area-inset-top) - 10px);margin:auto auto 0;overflow:hidden;box-shadow:0 -16px 80px #0004}
+#menuDialog::backdrop{background:#0008;backdrop-filter:blur(5px)}
+#menuDialog[open]{animation:schema-appear .2s ease-out}.menu-shell{height:100%;display:flex;flex-direction:column}
+.menu-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:20px 18px 12px;flex-shrink:0}
+.menu-header h2{font-size:1.25rem;margin:0;color:var(--siri)}.menu-header p{margin:3px 0 0;color:var(--muted);font-size:.8125rem}
+#menuClose{width:44px;height:44px;min-height:44px;padding:0;border-radius:50%;background:var(--line);color:var(--ink);font-size:1.8rem}
+.menu-body{overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:0 14px max(24px,env(safe-area-inset-bottom));flex:1;min-height:0;text-align:center}
+.menu-body img{display:block;width:100%;height:auto;max-width:100%;margin:0 auto;border-radius:14px;background:#fff;touch-action:pan-x pan-y pinch-zoom}
+.menu-fallback{color:var(--muted);padding:28px 8px;font-size:.9375rem}
+@media(prefers-reduced-motion:reduce){#menuDialog[open]{animation:none}}
 </style>
 <style>.schema-open{position:relative;background:transparent;color:var(--accent);padding:0 2px;margin-left:auto;min-height:30px;font-size:.75rem;font-weight:600;white-space:nowrap;border:0;box-shadow:none}
 .schema-open::after{content:'';position:absolute;inset:-7px -2px}
@@ -318,7 +336,7 @@ html{font-size:16px;color-scheme:light}body{font-family:-apple-system,BlinkMacSy
     </details>
   </div>
 
-  <footer>Data från Trafiklab.se • Familjepanel v10</footer>
+  <footer>Data från Trafiklab.se • Familjepanel v11</footer>
 </div>
 
 <script>
@@ -780,35 +798,22 @@ async function loadWeather(){
 
 
 async function loadSchoolLunch(){
-  const p=todayPlan(localNow());
-
-  if(!p.school){
-    siriAfter.textContent='Ingen skollunch idag';
-    axelAfter.textContent='Ingen skollunch idag';
-    return;
-  }
-
-  siriAfter.textContent='Hämtar…';
-  axelAfter.textContent='Hämtar…';
-
-  try{
-    const data=await workerApi('/school-lunch');
-
-    siriAfter.textContent=
-      data.siri?.meal ||
-      'Meny saknas';
-
-    axelAfter.textContent=
-      data.axel?.meal ||
-      'Meny saknas';
-
-  }catch(e){
-    siriAfter.textContent='Kunde inte hämta menyn';
-    axelAfter.textContent='Kunde inte hämta menyn';
-  }
+ const d=selectedDate(),key=ymd(d),request=++lunchRequest,school=isSchoolDay(d);
+ if(school){
+   siriAfter.textContent='Hämtar menyn…';
+   axelAfter.textContent='Hämtar menyn…';
+ }else renderSelectedLunch();
+ try{
+  const data=await workerApi('/school-lunch?date='+encodeURIComponent(key));
+  if(request===lunchRequest)siriMenuImage=data.siri?.menuImage||'';
+  if(data.date===key)lunchByDate.set(key,data);
+  if(request===lunchRequest)renderSelectedLunch();
+ }catch(e){
+  if(request===lunchRequest)renderSelectedLunch();
+ }
 }
 
-let selectedDay=0, calendarEvents=[], calendarLoaded=false, calendarError='', lunchRequest=0;
+let selectedDay=0, calendarEvents=[], calendarLoaded=false, calendarError='', lunchRequest=0, siriMenuImage='';
 const lunchByDate=new Map();
 function selectedDate(){const d=localNow();d.setDate(d.getDate()+selectedDay);return d}
 function dateLabel(d){return new Intl.DateTimeFormat('sv-SE',{weekday:'long',day:'numeric',month:'long'}).format(d)}
@@ -838,18 +843,14 @@ function renderNext(){
 }
 function renderSelectedLunch(){
  const key=ymd(selectedDate()),school=isSchoolDay(selectedDate()),data=lunchByDate.get(key);
- for(const name of ['siri','axel'])document.getElementById(name+'After').textContent=!school?'Ingen skollunch denna dag':data?.[name]?.meal|| (selectedDay?'Morgondagens meny är inte tillgänglig i panelen':'Meny saknas');
-}
-async function loadSchoolLunch(){
- const d=selectedDate(),key=ymd(d),request=++lunchRequest;
- if(!isSchoolDay(d)){renderSelectedLunch();return}
- for(const name of ['siri','axel'])document.getElementById(name+'After').textContent='Hämtar menyn…';
- try{
-  const data=await workerApi('/school-lunch'+(selectedDay?'?date='+encodeURIComponent(key):''));
-  // Older Workers ignore date. Never show today's meal as tomorrow's.
-  if(data.date===key)lunchByDate.set(key,data);
-  if(request===lunchRequest)renderSelectedLunch();
- }catch(e){if(request===lunchRequest)for(const name of ['siri','axel'])document.getElementById(name+'After').textContent=selectedDay?'Morgondagens meny kunde inte hämtas':'Kunde inte hämta menyn'}
+ const siri=document.getElementById('siriAfter'),axel=document.getElementById('axelAfter');
+ document.querySelector('.child-block.siri')?.classList.toggle('has-menu',Boolean(siriMenuImage));
+ if(siriMenuImage){
+   siri.innerHTML='<button type="button" class="menu-open" id="openSiriMenu" aria-haspopup="dialog" aria-label="Visa Siris veckomeny">Veckomeny <span aria-hidden="true">›</span></button>';
+ }else{
+   siri.textContent=school?'Meny ej tillgänglig':'Ingen skollunch denna dag';
+ }
+ axel.textContent=!school?'Ingen skollunch denna dag':(data?.axel?.meal||(selectedDay?'Morgondagens meny är inte tillgänglig i panelen':'Meny saknas'));
 }
 function calendarEventHtml(ev){
  const meta=[calendarTimeLabel(ev),ev.location].filter(Boolean).join(' · '),color=/^#[0-9a-f]{3,8}$/i.test(ev.color||'')?ev.color:'#8e8e93';
@@ -969,6 +970,7 @@ setInterval(loadSchoolLunch,30*60*1000);
 
 if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
 </script>
+
 <script>
 // Device-local display preference; no changes to v6 fetching or scheduling.
 const kioskButton=document.getElementById('kioskToggle');
@@ -976,7 +978,30 @@ function setKiosk(enabled){document.documentElement.classList.toggle('kiosk',ena
 try{setKiosk(localStorage.getItem('familjepanel_kiosk')==='1')}catch{}
 kioskButton.addEventListener('click',()=>{const enabled=!document.documentElement.classList.contains('kiosk');setKiosk(enabled);try{localStorage.setItem('familjepanel_kiosk',enabled?'1':'0')}catch{}});
 </script>
-<dialog id="schemaDialog" aria-labelledby="schemaTitle"><div class="schema-shell"><header class="schema-header"><div><h2 id="schemaTitle"></h2><p id="schemaSchool"></p></div><button type="button" id="schemaClose" aria-label="Stäng schema">×</button></header><div class="schema-tabs" role="group" aria-label="Schemavy"><button type="button" data-view="today" aria-pressed="true">I dag</button><button type="button" data-view="week" aria-pressed="false">Vecka</button></div><div id="schemaBody" class="schema-body"></div></div></dialog><script>const subjectSchedules={"siri":[[{"color":"portfolio","start":510,"end":540,"title":"Portfolio"},{"color":"so","start":545,"end":595,"title":"SO"},{"color":"sv","start":610,"end":675,"title":"Svenska"},{"color":"lunch","start":675,"end":695,"title":"Lunch"},{"color":"ma","start":720,"end":780,"title":"Matematik"},{"color":"eng","start":785,"end":840,"title":"Engelska"}],[{"color":"sv","start":510,"end":555,"title":"Svenska"},{"color":"so","start":570,"end":640,"title":"SO"},{"color":"lunch","start":645,"end":665,"title":"Lunch"},{"color":"no","start":690,"end":750,"title":"NO"},{"color":"sv","start":765,"end":850,"title":"Svenska"},{"color":"animation","start":930,"end":990,"title":"Animation"}],[{"color":"ma","start":510,"end":565,"title":"Matematik"},{"color":"eng","start":580,"end":640,"title":"Engelska"},{"color":"lunch","start":640,"end":660,"title":"Lunch"},{"color":"so","start":685,"end":775,"title":"SO"},{"color":"no","start":790,"end":840,"title":"NO"}],[{"color":"musik","start":510,"end":555,"title":"Musik"},{"color":"no","start":560,"end":600,"title":"NO"},{"color":"slojd","start":615,"end":690,"title":"Slöjd"},{"color":"lunch","start":690,"end":710,"title":"Lunch"},{"color":"ma","start":730,"end":775,"title":"Matematik"},{"color":"sv","start":780,"end":840,"title":"Svenska"}],[{"color":"sv","start":510,"end":570,"title":"Svenska"},{"color":"ma","start":585,"end":625,"title":"Matematik"},{"color":"future","start":630,"end":670,"title":"Future me"},{"color":"lunch","start":670,"end":690,"title":"Lunch"},{"color":"idrott","start":710,"end":790,"title":"Idrott"},{"color":"bild","start":820,"end":860,"title":"Bild"}]],"axel":[[{"color":"ma","start":510,"end":550,"title":"Matematik"},{"color":"sv","start":550,"end":580,"title":"Svenska"},{"color":"sv","start":600,"end":610,"title":"Svenska"},{"color":"teknik","start":610,"end":640,"title":"Teknik"},{"color":"no","start":640,"end":680,"title":"NO"},{"color":"mix-idrott-sv","start":740,"end":810,"title":"Idrott och hälsa / Svenska"}],[{"color":"sv","start":510,"end":520,"title":"Svenska"},{"color":"mix-ma-musik","start":520,"end":565,"title":"Matematik / Musik"},{"color":"mix-ma-musik","start":590,"end":635,"title":"Matematik / Musik"},{"color":"eng","start":635,"end":680,"title":"Engelska"},{"color":"mix-idrott-sv","start":740,"end":810,"title":"Idrott och hälsa / Svenska"}],[{"color":"sv","start":510,"end":520,"title":"Svenska"},{"color":"samlad","start":520,"end":550,"title":"Samlad skoldag"},{"color":"samlad","start":550,"end":580,"title":"Samlad skoldag"},{"color":"ma","start":600,"end":650,"title":"Matematik"},{"color":"sv","start":650,"end":680,"title":"Svenska"},{"color":"so","start":740,"end":790,"title":"SO"},{"color":"sv","start":790,"end":840,"title":"Svenska"}],[{"color":"ma","start":510,"end":545,"title":"Matematik"},{"color":"sv","start":545,"end":580,"title":"Svenska"},{"color":"so","start":640,"end":680,"title":"SO"},{"color":"no","start":740,"end":790,"title":"NO"},{"color":"bild","start":790,"end":840,"title":"Bild"}],[{"color":"mix-idrott-ma","start":510,"end":650,"title":"Idrott och hälsa / Matematik"},{"color":"sv","start":650,"end":680,"title":"Svenska"},{"color":"so","start":740,"end":770,"title":"SO"},{"color":"sv","start":770,"end":810,"title":"Svenska"}]]};
+<dialog id="menuDialog" aria-labelledby="menuTitle"><div class="menu-shell"><header class="menu-header"><div><h2 id="menuTitle">Siris veckomeny</h2><p>Friskolan Asken</p></div><button type="button" id="menuClose" aria-label="Stäng meny">×</button></header><div id="menuBody" class="menu-body"><div class="menu-fallback">Hämtar veckomeny…</div></div></div></dialog><script>
+const menuDialog=document.getElementById('menuDialog'),menuBody=document.getElementById('menuBody');
+let menuOpener=null,menuScrollY=0,menuOldStyle=null;
+function openSiriMenu(){
+ if(!siriMenuImage)return;
+ menuOpener=document.activeElement;menuBody.replaceChildren();
+ const img=document.createElement('img');img.src=siriMenuImage;img.alt='Friskolan Askens veckomeny';img.loading='eager';
+ img.addEventListener('error',()=>{menuBody.innerHTML='<div class="menu-fallback">Veckomenyn kunde inte visas just nu.</div>'});
+ menuBody.append(img);
+ menuScrollY=window.scrollY;menuOldStyle=document.body.getAttribute('style');
+ Object.assign(document.body.style,{position:'fixed',top:`-${menuScrollY}px`,width:'100%',overflow:'hidden'});
+ menuDialog.showModal();document.getElementById('menuClose').focus();
+}
+document.addEventListener('click',e=>{if(e.target.closest?.('#openSiriMenu'))openSiriMenu()});
+document.getElementById('menuClose').onclick=()=>menuDialog.close();
+let menuOutside=false;
+const menuIsOutside=e=>{const r=menuDialog.getBoundingClientRect();return e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom};
+menuDialog.addEventListener('pointerdown',e=>{menuOutside=menuIsOutside(e)});
+menuDialog.addEventListener('click',e=>{if(menuOutside&&menuIsOutside(e))menuDialog.close();menuOutside=false});
+menuDialog.addEventListener('close',()=>{
+ if(menuOldStyle===null)document.body.removeAttribute('style');else document.body.setAttribute('style',menuOldStyle);
+ window.scrollTo(0,menuScrollY);menuOpener?.focus?.({preventScroll:true});
+});
+</script><dialog id="schemaDialog" aria-labelledby="schemaTitle"><div class="schema-shell"><header class="schema-header"><div><h2 id="schemaTitle"></h2><p id="schemaSchool"></p></div><button type="button" id="schemaClose" aria-label="Stäng schema">×</button></header><div class="schema-tabs" role="group" aria-label="Schemavy"><button type="button" data-view="today" aria-pressed="true">I dag</button><button type="button" data-view="week" aria-pressed="false">Vecka</button></div><div id="schemaBody" class="schema-body"></div></div></dialog><script>const subjectSchedules={"siri":[[{"color":"portfolio","start":510,"end":540,"title":"Portfolio"},{"color":"so","start":545,"end":595,"title":"SO"},{"color":"sv","start":610,"end":675,"title":"Svenska"},{"color":"lunch","start":675,"end":695,"title":"Lunch"},{"color":"ma","start":720,"end":780,"title":"Matematik"},{"color":"eng","start":785,"end":840,"title":"Engelska"}],[{"color":"sv","start":510,"end":555,"title":"Svenska"},{"color":"so","start":570,"end":640,"title":"SO"},{"color":"lunch","start":645,"end":665,"title":"Lunch"},{"color":"no","start":690,"end":750,"title":"NO"},{"color":"sv","start":765,"end":850,"title":"Svenska"},{"color":"animation","start":930,"end":990,"title":"Animation"}],[{"color":"ma","start":510,"end":565,"title":"Matematik"},{"color":"eng","start":580,"end":640,"title":"Engelska"},{"color":"lunch","start":640,"end":660,"title":"Lunch"},{"color":"so","start":685,"end":775,"title":"SO"},{"color":"no","start":790,"end":840,"title":"NO"}],[{"color":"musik","start":510,"end":555,"title":"Musik"},{"color":"no","start":560,"end":600,"title":"NO"},{"color":"slojd","start":615,"end":690,"title":"Slöjd"},{"color":"lunch","start":690,"end":710,"title":"Lunch"},{"color":"ma","start":730,"end":775,"title":"Matematik"},{"color":"sv","start":780,"end":840,"title":"Svenska"}],[{"color":"sv","start":510,"end":570,"title":"Svenska"},{"color":"ma","start":585,"end":625,"title":"Matematik"},{"color":"future","start":630,"end":670,"title":"Future me"},{"color":"lunch","start":670,"end":690,"title":"Lunch"},{"color":"idrott","start":710,"end":790,"title":"Idrott"},{"color":"bild","start":820,"end":860,"title":"Bild"}]],"axel":[[{"color":"ma","start":510,"end":550,"title":"Matematik"},{"color":"sv","start":550,"end":580,"title":"Svenska"},{"color":"sv","start":600,"end":610,"title":"Svenska"},{"color":"teknik","start":610,"end":640,"title":"Teknik"},{"color":"no","start":640,"end":680,"title":"NO"},{"color":"mix-idrott-sv","start":740,"end":810,"title":"Idrott och hälsa / Svenska"}],[{"color":"sv","start":510,"end":520,"title":"Svenska"},{"color":"mix-ma-musik","start":520,"end":565,"title":"Matematik / Musik"},{"color":"mix-ma-musik","start":590,"end":635,"title":"Matematik / Musik"},{"color":"eng","start":635,"end":680,"title":"Engelska"},{"color":"mix-idrott-sv","start":740,"end":810,"title":"Idrott och hälsa / Svenska"}],[{"color":"sv","start":510,"end":520,"title":"Svenska"},{"color":"samlad","start":520,"end":550,"title":"Samlad skoldag"},{"color":"samlad","start":550,"end":580,"title":"Samlad skoldag"},{"color":"ma","start":600,"end":650,"title":"Matematik"},{"color":"sv","start":650,"end":680,"title":"Svenska"},{"color":"so","start":740,"end":790,"title":"SO"},{"color":"sv","start":790,"end":840,"title":"Svenska"}],[{"color":"ma","start":510,"end":545,"title":"Matematik"},{"color":"sv","start":545,"end":580,"title":"Svenska"},{"color":"so","start":640,"end":680,"title":"SO"},{"color":"no","start":740,"end":790,"title":"NO"},{"color":"bild","start":790,"end":840,"title":"Bild"}],[{"color":"mix-idrott-ma","start":510,"end":650,"title":"Idrott och hälsa / Matematik"},{"color":"sv","start":650,"end":680,"title":"Svenska"},{"color":"so","start":740,"end":770,"title":"SO"},{"color":"sv","start":770,"end":810,"title":"Svenska"}]]};
 (()=>{
  const dialog=document.getElementById('schemaDialog'),body=document.getElementById('schemaBody');
  const days=['Måndag','Tisdag','Onsdag','Torsdag','Fredag'];

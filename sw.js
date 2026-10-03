@@ -1,4 +1,4 @@
-const CACHE='familjepanel-v10';
+const CACHE='familjepanel-v11';
 const ASSETS=['./','./index.html','./manifest.webmanifest','./favicon.svg'];
 
 self.addEventListener('install',e=>{
