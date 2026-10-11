@@ -110,7 +110,7 @@ footer{text-align:center;color:#8a93a3;font-size:11px;margin:20px 0 4px}
 
 .lunch-value{font-size:12px;line-height:1.25;max-width:62%;text-align:right}
 @media(max-width:560px){.lunch-value{max-width:64%;font-size:11px}}
-/* Familjepanel v11: presentation layer over the unchanged v6 data logic. */
+/* Familjepanel v12: presentation layer over the unchanged v6 data logic. */
 :root{--bg:#f2f2f7;--card:#fff;--ink:#1d1d1f;--muted:#626269;--line:#e5e5ea;--siri:#b52f60;--siriSoft:#fbeaf0;--axel:#1763ad;--axelSoft:#eaf2fc;--bus:#22764b;--busSoft:#eef6f0;--train:#6452a3;--trainSoft:#f3f1f8;--warnSoft:#fff4e5;--accent:#0066cc;--shadow:0 2px 4px #20203803,0 12px 28px #20203805}
 html{font-size:16px;color-scheme:light}body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.45;-webkit-font-smoothing:antialiased}
 .app{max-width:1180px;padding: max(20px,env(safe-area-inset-top)) max(20px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(20px,env(safe-area-inset-left))}
@@ -243,6 +243,14 @@ html{font-size:16px;color-scheme:light}body{font-family:-apple-system,BlinkMacSy
 @keyframes schema-appear{from{transform:translateY(35px);opacity:0}to{transform:translateY(0);opacity:1}}
 @media(prefers-reduced-motion:reduce){#schemaDialog[open]{animation:none}}
 @media(max-width:360px){.child-name{gap:4px}.child-line .avatar{width:26px;height:26px}.schema-open{font-size:.6875rem}.schema-header{padding:18px 14px 12px}.schema-tabs{margin-left:14px;margin-right:14px}.schema-body{padding-left:14px;padding-right:14px}}
+.app .card.keep-card{margin-top:14px;padding:4px 16px;overflow:hidden}
+.keep-link{display:flex;align-items:center;gap:10px;min-height:48px;padding:10px 0;color:var(--ink);text-decoration:none;font-size:.9375rem;font-weight:600}
+.keep-link+.keep-link{border-top:1px solid var(--line)}
+.keep-icon{width:24px;text-align:center;flex-shrink:0}
+.keep-arrow{margin-left:auto;color:var(--muted);font-size:1.25rem;font-weight:400}
+.keep-link:active{opacity:.7}
+.keep-account{margin:12px 0 0;font-size:.75rem;line-height:1.5;color:var(--muted);overflow-wrap:anywhere}
+.keep-account a{color:inherit}
 </style></head>
 <body>
 <div class="app">
@@ -297,6 +305,11 @@ html{font-size:16px;color-scheme:light}body{font-family:-apple-system,BlinkMacSy
     <section class="card week-card"><h2><svg class="symbol" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 11h18M8 15h2m4 0h2"/></svg> Kommande 7 dagar</h2><div id="week"></div></section>
   </div>
 
+  <nav class="card keep-card" aria-label="Familjens listor i Google Keep">
+    <a class="keep-link" id="keepShoppingLink" href="https://keep.google.com/#LIST/1LRUVJwB1rwmi-jjPotgCTbnlh55dXyIhyMcJuEdR2r4VzLGUv6QyE_D_W8p2PhYhUJmoEynF" target="_blank" rel="noopener noreferrer" aria-label="Öppna Inköpslistan i Google Keep"><span class="keep-icon" aria-hidden="true">🛒</span><span>Inköpslistan</span><span class="keep-arrow" aria-hidden="true">›</span></a>
+    <a class="keep-link" id="keepTodoLink" href="https://keep.google.com/#LIST/1h3t1hhH_WCqWoekX1XEL952zRR0D3zSMjVMNMUWPi65W3SkS8LweYcDWyddlow" target="_blank" rel="noopener noreferrer" aria-label="Öppna Att göra i Google Keep"><span class="keep-icon" aria-hidden="true">✅</span><span>Att göra</span><span class="keep-arrow" aria-hidden="true">›</span></a>
+  </nav>
+
   <div class="settings">
     <details>
       <summary>Inställningar</summary><button class="view-button" id="kioskToggle" type="button" aria-pressed="false" title="Kompakt visning för bred iPad och väggskärm"><svg class="symbol" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 22h8m-4-4v4"/></svg><span>Skärmläge</span></button>
@@ -328,6 +341,16 @@ html{font-size:16px;color-scheme:light}body{font-family:-apple-system,BlinkMacSy
         <input id="kulturId" placeholder="740021879">
       </div>
 
+      <div class="field">
+        <label for="keepShoppingUrl">Inköpslistan, Keep-länk</label>
+        <input id="keepShoppingUrl" type="url" inputmode="url" autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="keepAccountInfo">
+      </div>
+      <div class="field">
+        <label for="keepTodoUrl">Att göra, Keep-länk</label>
+        <input id="keepTodoUrl" type="url" inputmode="url" autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="keepAccountInfo">
+      </div>
+      <p class="keep-account" id="keepAccountInfo">Listorna finns i Google Keep på vårt gemensamma konto: <a href="mailto:vanso.ekbacken@gmail.com">vanso.ekbacken@gmail.com</a>. Använd samma konto när du öppnar dem.</p>
+
       <div class="toolbar">
         <button id="saveSettings">Spara</button>
         <button class="secondary" id="findStops">Sök hållplatser</button>
@@ -336,7 +359,7 @@ html{font-size:16px;color-scheme:light}body{font-family:-apple-system,BlinkMacSy
     </details>
   </div>
 
-  <footer>Data från Trafiklab.se • Familjepanel v11</footer>
+  <footer>Data från Trafiklab.se • Familjepanel v12</footer>
 </div>
 
 <script>
@@ -380,19 +403,34 @@ function renderStatic(){
   renderPlannedBus();
 }
 
+const KEEP_DEFAULTS={shopping:'https://keep.google.com/#LIST/1LRUVJwB1rwmi-jjPotgCTbnlh55dXyIhyMcJuEdR2r4VzLGUv6QyE_D_W8p2PhYhUJmoEynF',todo:'https://keep.google.com/#LIST/1h3t1hhH_WCqWoekX1XEL952zRR0D3zSMjVMNMUWPi65W3SkS8LweYcDWyddlow'};
+function normalizeKeepUrl(value,fallback){
+  const text=String(value||'').trim();
+  if(!text)return fallback;
+  try{const url=new URL(text);return url.origin==='https://keep.google.com'&&!url.username&&!url.password?url.href:null}catch{return null}
+}
+function renderKeepLinks(){
+  const s=getSettings();
+  document.getElementById('keepShoppingLink').href=s.keepShopping;
+  document.getElementById('keepTodoLink').href=s.keepTodo;
+}
 function getSettings(){
   return{
     calendarWorker:localStorage.getItem('calendar_worker_url')||'https://familjepanel-calendar.7ydb66wf9r.workers.dev/',
     panelToken:localStorage.getItem('calendar_panel_token')||'',
     roteby:localStorage.getItem('roteby_id')||'740038257',
     sundby:localStorage.getItem('sundby_id')||'740021882',
-    kultur:localStorage.getItem('kultur_id')||'740021879'
+    kultur:localStorage.getItem('kultur_id')||'740021879',
+    keepShopping:normalizeKeepUrl(localStorage.getItem('keep_shopping_url'),KEEP_DEFAULTS.shopping)||KEEP_DEFAULTS.shopping,
+    keepTodo:normalizeKeepUrl(localStorage.getItem('keep_todo_url'),KEEP_DEFAULTS.todo)||KEEP_DEFAULTS.todo
   }
 }
 function fillSettings(){
   const s=getSettings();
   calendarWorkerUrl.value=s.calendarWorker;panelToken.value=s.panelToken;
   rotebyId.value=s.roteby;sundbyId.value=s.sundby;kulturId.value=s.kultur;
+  document.getElementById('keepShoppingUrl').value=s.keepShopping;
+  document.getElementById('keepTodoUrl').value=s.keepTodo;
 }
 async function workerApi(path){
   const s=getSettings();
@@ -943,6 +981,13 @@ const loadTrainsBeforeV9=loadTrains;
 loadTrains=async function(){await loadTrainsBeforeV9();const empty=Boolean(document.querySelector('#trainToStockholm .train-empty')&&document.querySelector('#trainToStrangnas .train-empty'));document.querySelector('.traincard')?.classList.toggle('is-empty',empty);};
 
 saveSettings.onclick=()=>{
+  const shoppingInput=document.getElementById('keepShoppingUrl'),todoInput=document.getElementById('keepTodoUrl');
+  const shopping=normalizeKeepUrl(shoppingInput.value,KEEP_DEFAULTS.shopping),todo=normalizeKeepUrl(todoInput.value,KEEP_DEFAULTS.todo);
+  if(!shopping||!todo){settingsStatus.textContent='Ange en HTTPS-länk till keep.google.com för '+(!shopping?'Inköpslistan.':'Att göra.');(!shopping?shoppingInput:todoInput).focus();return}
+  localStorage.setItem('keep_shopping_url',shopping);
+  localStorage.setItem('keep_todo_url',todo);
+  shoppingInput.value=shopping;todoInput.value=todo;
+  renderKeepLinks();
   localStorage.setItem('calendar_worker_url',calendarWorkerUrl.value.trim());
   localStorage.setItem('calendar_panel_token',panelToken.value.trim());
   localStorage.setItem('roteby_id',rotebyId.value.trim());
@@ -958,6 +1003,7 @@ refresh.onclick=()=>{renderPlannedBus();loadDepartures();loadTrains();loadCalend
 toggleAll.onclick=()=>{showAll=!showAll;toggleAll.textContent=showAll?'Visa bara 325/631':'Visa alla bussar';loadDepartures()};
 
 fillSettings();
+renderKeepLinks();
 renderStatic();
 loadDepartures();
 loadTrains();
